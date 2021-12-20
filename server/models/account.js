@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
   }
   account.init({
     uuid: DataTypes.UUID,
-    id: DataTypes.STRING,
+    user_id: DataTypes.STRING,
     pw_hash: DataTypes.STRING,
     name: DataTypes.STRING,
     salt: DataTypes.STRING,
