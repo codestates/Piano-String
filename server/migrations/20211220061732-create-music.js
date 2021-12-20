@@ -2,7 +2,6 @@ module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('music', {
       uuid: {
-        allowNull: false,
         primaryKey: true,
         type: Sequelize.UUID,
       },
@@ -10,7 +9,7 @@ module.exports = {
         allowNull: false,
         type: Sequelize.UUID,
         references: {
-          model: 'accounts',
+          model: 'account',
           key: 'uuid',
         },
       },

@@ -12,12 +12,38 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   article.init({
-    uuid: DataTypes.UUID,
-    account_uuid: DataTypes.UUID,
-    music_uuid: DataTypes.UUID,
-    title: DataTypes.STRING,
-    content: DataTypes.STRING,
-    created_at: DataTypes.DATE,
+    uuid: {
+      primaryKey: true,
+      type: DataTypes.UUID,
+    },
+    account_uuid: {
+      allowNull: false,
+      type: DataTypes.UUID,
+      references: {
+        model: 'account',
+        key: 'uuid'
+      }
+    },
+    music_uuid: {
+      allowNull: false,
+      type: DataTypes.UUID,
+      references: {
+        model: 'music',
+        key: 'uuid'
+      }
+    },
+    title: {
+      allowNull: false,
+      type: DataTypes.STRING
+    },
+    content: {
+      allowNull: false,
+      type: DataTypes.STRING
+    },
+    created_at: {
+      allowNull: false,
+      type: DataTypes.DATE
+    }
   }, {
     sequelize,
     modelName: 'article',

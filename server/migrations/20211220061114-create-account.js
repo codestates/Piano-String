@@ -1,6 +1,6 @@
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('accounts', {
+    await queryInterface.createTable('account', {
       uuid: {
         allowNull: false,
         primaryKey: true,
@@ -34,10 +34,10 @@ module.exports = {
         allowNull: false,
         type: Sequelize.BOOLEAN,
       },
-      expired_at: { type: Sequelize.DATE },
+      expired_at: { type: Sequelize.DATE }
     });
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('accounts');
+    await queryInterface.dropTable('account');
   },
 };
