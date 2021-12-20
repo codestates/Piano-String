@@ -16,6 +16,7 @@ module.exports = {
   rules: {
     "arrow-parens": ["warn", "as-needed", { requireForBlockBody: true }],
     "comma-dangle": ["warn", "always-multiline"],
+    "no-console": "off",
     "object-curly-newline": ["warn", { multiline: true }],
   },
 };
