@@ -1,9 +1,14 @@
 import './App.css';
+import SignIn from './pages/SignIn'
+import SignUp from './pages/SignUp'
 
 function App() {
   return (
     <div className="App">
-      <p>Hello, world!</p>
+
+      {/* <SignIn /> */}
+      <SignUp />
+  
     </div>
   );
 }
