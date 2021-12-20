@@ -5,10 +5,14 @@
   "description": "Piano-string backend server",
   "main": "index.js",
   "scripts": {
+    "start": "node app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "express": "^4.17.2"
+    "axios": "^0.24.0",
+    "express": "^4.17.2",
+    "jsonwebtoken": "^8.5.1",
+    "sequelize": "^6.12.0"
   },
   "devDependencies": {
     "eslint": "^8.5.0",
