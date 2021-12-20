@@ -1,43 +1,50 @@
 import axios from 'axios';
 import React, { useState } from 'react';
+import hashPassword from '../utils/hashPassword';
 
 function SignUpPage() {
   const [userInput, setuserInput] = useState({
     id: '',
     pw: '',
     name: '',
-    pwCheck: ''
-  })
-  const API_SERVER='';
+    pwCheck: '',
+  });
+  const API_SERVER = '';
 
-  const controlInputValue = (key) => (e) => {ç
-    setuserInput({ ...userInput, [key]: e.target.value});
-  }
+  const controlInputValue = key => (e) => {
+    setuserInput({ ...userInput, [key]: e.target.value });
+  };
 
   const onClickSignUp = () => {
-    const {id, pw, name, pwCheck} = userInput;
+    const { id, pw, name, pwCheck } = userInput;
+    // // TODO: 해쉬작업
 
-    if(!id || !pw || !name || !pwCheck){
-      console.log('모든 칸을 채워야 합니다')
+    if (!id || !pw || !name || !pwCheck) {
+      console.log('모든 칸을 채워야 합니다');
+      return;
     }
 
-    if(pw === pwCheck){
-      console.log('사용가능')
-    }else{
-      console.log('비밀번호가 다릅니다')
-    }
+    hashPassword(pw)
+      .then((pwHash) => {
+        hashPassword(pwCheck)
+          .then((pwCheckHash) => {
+            if (pwHash === pwCheckHash) {
+              console.log('사용가능');
+            } else {
+              console.log('비밀번호가 다릅니다');
+            }
+          });
 
-    const pw_hash = pw;
-
-    axios.post(API_SERVER,{
-      id,
-      pw_hash,
-      name
-    })
-    .then(res => {
-      console.log('가입성공');
-    })
-  }
+        //   axios.post(API_SERVER,{
+        //   id,
+        //   pw_hash,
+        //   name
+        //   })
+        //   .then(res => {
+        //   console.log('가입성공');
+        //   })
+      });
+  };
 
   return (
     <div className="SignUpContainer">

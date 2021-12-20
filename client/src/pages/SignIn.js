@@ -1,16 +1,17 @@
 import axios from 'axios';
 import React, { useState } from 'react';
+import hashPassword from '../utils/hashPassword';
 
 function SignInPage() {
   const [userInput, setUserInput] = useState({
     id: '',
-    pw: ''
+    pw: '',
   });
   // TODO: dotenv
   const API_SERVER = '';
 
-  const controlInput = (key) => (e) => {
-    setUserInput({ ...userInput, [key]: e.target.value});
+  const controlInput = key => (e) => {
+    setUserInput({ ...userInput, [key]: e.target.value });
   };
 
   // const controlInputPw = (e) => {
@@ -18,16 +19,20 @@ function SignInPage() {
   // };
 
   const onClickSignIn = () => {
-    const {id, pw} = userInput
+    const { id, pw } = userInput;
     // TODO: 비밀번호 해쉬화 작성
-    const pw_hash = userInput.pw;
-    axios.post(API_SERVER, {
-      id: userInput.id,
-      pw_hash,
-    })
-      .then((res) => {
-      // TODO: respones 처리
-        console.log('성공');
+    hashPassword(pw)
+      .then((pwHash) => {
+        console.log(pwHash);
+      // // TODO: pwHash 입력이 같으면 출력값 똑같이 나오는지 확인
+        // axios.post(API_SERVER, {
+        //   id,
+        //   pw_hash: pwHash,
+        // })
+        // .then((res) => {
+        // // TODO: respones 처리
+        //   console.log('성공');
+        // });
       });
   };
 
