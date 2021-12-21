@@ -16,6 +16,11 @@ function App() {
   const controlLogin = () => {
     setUserState(!userState.isSignedIn);
   }
+  const [isLogin, setIsLogin] = useState(false);
+
+  const controlLogin = () => {
+    setIsLogin(!isLogin);
+  };
 
   return (
     <div className="App">
@@ -25,6 +30,7 @@ function App() {
           <Route index element="Hello World" />
           <Route path="sign-in" element={<SignInPage {...{ setUserState }}/>} />
           <Route path="sign-up" element={<SignUpPage {...{ setUserState }}/>} />
+          <Route path="user" element={<MyPage isLogin={isLogin} />} />
         </Route>
       </Routes>
       <Footer />
