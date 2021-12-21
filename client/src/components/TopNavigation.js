@@ -1,23 +1,23 @@
 import React, { useState } from 'react';
 
-const TopNavigation = ({ controlLogin, isLogin }) => (
+const TopNavigation = ({ userState }) => (
   <nav className="TopNavigation">
     <div className="TopNavigation_logo">
       음악 일기
     </div>
 
-    {isLogin
+    { userState.isSignedIn
       ? (
         <ul className="TopNavigation_manu">
           <li>Announcement</li>
           <li>Post</li>
           <li>MyPage</li>
-          <li onClick={controlLogin} onKeyDown={controlLogin}>Logout</li>
+          <li>Logout</li>
         </ul>
       )
       : (
         <ul className="TopNavigation_manu">
-          <li onClick={controlLogin} onKeyDown={controlLogin}>Login</li>
+          <li>Login</li>
         </ul>
       )}
   </nav>
