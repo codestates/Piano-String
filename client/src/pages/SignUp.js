@@ -29,12 +29,12 @@ function SignUpPage({ setUserState }) {
 
     hashPassword(pw)
       .then((pw_hash) => {
-        axios.post(appConfig.API_SERVER + '/sign-up',{ id, pw_hash, name })
+        axios.post(appConfig.API_SERVER + '/user/sign-up',{ id, pw_hash, name })
         .then(res => {
           setUserState({
             isSignedIn: true,
             access_token: res.data.access_token,
-            info: { id, name },
+            uuid: res.data.uuid,
           })
         })
         .then(() => { navigate('/'); })

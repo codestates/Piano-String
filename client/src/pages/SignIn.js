@@ -19,7 +19,7 @@ function SignInPage({ setUserState }) {
     const { id, pw } = userInput;
     hashPassword(pw)
       .then((pwHash) => {
-        axios.post(appConfig.API_SERVER + '/sign-in', {
+        axios.post(appConfig.API_SERVER + '/user/sign-in', {
           id,
           pw_hash: pwHash,
         })
@@ -27,7 +27,7 @@ function SignInPage({ setUserState }) {
           setUserState({
             isSignedIn: true,
             accessToken: res.data.access_token,
-            info: { id: id },
+            uuid: res.data.uuid,
           })
         })
         .then(() => {
