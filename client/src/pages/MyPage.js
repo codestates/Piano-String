@@ -2,24 +2,19 @@ import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import UserInfoViewer from '../components/UserInfo';
 import ExpireModal from '../components/ExpireModal';
+import appConfig from '../app.config';
 
-function myPage({ isLogin }) {
+function myPage({ userState }) {
   const [updateInfo, setUpdateInfo] = useState(false);
   const [controlModal, setControlModal] = useState(false);
-  const [userInfo, setUserInfo] = useState({
-    user_id: '',
-    name: '',
-    createAt: '',
-  });
-  const API_SERVER = '';
 
   const getUserInfo = () => {
-    axios.get(API_SERVER)
+    axios.get(`${API_SERVER}/user/${userState.uuid}`)
       .then((res) => {
         setUserInfo({
-          user_id: res.data.user_id,
+          userId: res.data.user_id,
           name: res.data.name,
-          createAt: res.data.createAt,
+          createdAt: res.data.createdAt,
         });
       });
   };
@@ -36,9 +31,10 @@ function myPage({ isLogin }) {
     getUserInfo();
   }, []);
 
+  // TODO: if not signed in, use modal and redirect to sign-in page.
   return (
     <div>
-      {isLogin
+      { userState.isSignedIn
         ? (
           <div className="mypageContainer">
             <div className="infoContainer">

@@ -31,7 +31,7 @@ function App() {
           <Route index element="Hello World" />
           <Route path="sign-in" element={<SignInPage {...{ setUserState }}/>} />
           <Route path="sign-up" element={<SignUpPage {...{ setUserState }}/>} />
-          <Route path="user" element={<MyPage isLogin={isLogin} />} />
+          <Route path="user" element={<MyPage userState={userState} />} />
         </Route>
       </Routes>
       <Footer />
