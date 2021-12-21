@@ -28,13 +28,19 @@ module.exports = {
           const tokenData = {
             user_id: dataValues.user_id,
             name: dataValues.name,
-            access: dataValues.access,
+            created_at: new Date(),
           };
           const accessToken = jwt.sign(tokenData, dataValues.salt);
 
+          console.log(accessToken);
+
           message = 'login success!';
 
-          res.status(200).send({ message, accessToken });
+          res.status(200).send({
+            message,
+            accessToken,
+            uuid: dataValues.uuid,
+          });
         }
       });
     }
