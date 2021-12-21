@@ -1,8 +1,11 @@
 const express = require('express');
 const userRouter = require('./router/user');
 
+const { sequelize } = require('./models/index.js');
+
 const app = express();
 const port = 80;
+
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());

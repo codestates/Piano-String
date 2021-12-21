@@ -56,6 +56,8 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'account',
+    tableName: 'account',
+    timestamps: false,
   });
   return account;
 };
