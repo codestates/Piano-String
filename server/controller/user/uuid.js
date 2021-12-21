@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const { accounts } = require('../../models');
+const { account } = require('../../models');
 
 /**
  * @path /user/:uuid
@@ -23,7 +23,7 @@ module.exports = {
       res.status(401).send({ message: 'please check your token.' });
     }
     else {
-      await accounts.findOne({ where: { uuid: req.params.uuid } }).then((data) => {
+      await account.findOne({ where: { uuid: req.params.uuid, user_id: accessData.id } }).then((data) => {
         if (!data) {
           res.status(400).send({ message: 'not matched uuid.' });
         }
@@ -45,8 +45,8 @@ module.exports = {
     }
     else {
       const { pw_hash, name } = req.body;
-      await accounts.update({ pw_hash: pw_hash, name: name }, { where: { uuid: req.params.uuid } });
-      await accounts.findOne({ where: { uuid: req.params.uuid } }).then((data) => {
+      await account.update({ pw_hash: pw_hash, name: name }, { where: { uuid: req.params.uuid, user_id: accessData.id } });
+      await account.findOne({ where: { uuid: req.params.uuid, user_id:accessData.id } }).then((data) => {
         if (!data) {
           res.status(400).send({ message: 'please check your information.' });
         }
@@ -67,7 +67,15 @@ module.exports = {
       res.status(401).send({ data: null, message: 'please check your token.' });
     }
     else {
-      res.status(200).send({ message: 'success!', data: null });
+      await account.destroy({ where: { user_id: accessData.id, uuid: req.params.uuid } }).then((data) => {
+        if(!data){
+          res.status(400).send({ message: 'user does not exist.' })
+        }
+        else {
+          res.status(200).send({ message: 'success!' });
+        }
+      })
+      
     }
   },
 };
