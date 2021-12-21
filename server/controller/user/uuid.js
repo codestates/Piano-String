@@ -5,82 +5,81 @@ const { account } = require('../../models');
  * @path /user/:uuid
  */
 
-const verify = (data) => {
-  const authorization = data.headers.authorization;
-  if (!authorization) return null;
-  const token = authorization.split(' ')[1];
+const verify = (authorization, salt) => {
   try {
-    return {data:jwt.verify(token, '1234'), confirm:true}
-  }
-  catch (err) {
-    return {data:{}, confirm:false}
+    return jwt.verify(authorization, salt);
+  } catch (err) {
+    return null;
   }
 };
 
 module.exports = {
   get: (req, res) => {
-    const accessData = verify(req);
-    if (accessData.confirm===false) {
-      res.status(401).send({ message: 'please check your token.' });
+    const { authorization } = req.headers;
+    if (!authorization) {
+      return res.status(401).send({ message: 'please check your token.' });
     }
-    else {
-      account.findOne({ where: { uuid: accessData.data.uuid } })
-        .then((data) => {
-          if (!data) {
-            res.status(400).send({ message: 'not matched uuid.' });
-          }
-          else {
-            const payload = {
-              user_id: data.dataValues.user_id,
-              name: data.dataValues.name,
-              createdAt: data.dataValues.createdAt,
-            };
-            res.status(200).send({ message: 'success!', data: payload });
-          }
-        });
-    }
-  },
-  patch:  (req, res) => {
-    const accessData = verify(req);
-    if (accessData.confirm===false) {
-      res.status(401).send({ data: null, message: 'please check your token.' });
-    }
-    else {
-      const { pw_hash, name } = req.body;
-      account.update({ pw_hash: pw_hash, name: name }, { where: { uuid: accessData.data.uuid } })
-      .then((data)=>{
+
+    account.findOne({ where: { uuid: req.params.uuid } })
+      .then((data) => {
         if (!data) {
-          res.status(400).send({ message: 'please check your information.' });
+          return res.status(400).send({ message: 'not matched uuid.' });
         }
-        else{
-          account.findOne({ where: { uuid: accessData.data.uuid } }).then((data) => {
-            const payload = {
-              user_id: data.dataValues.user_id,
-              name: data.dataValues.name,
-              createdAt: data.dataValues.createdAt,
-            };
-            res.status(200).send({ message: 'change success!', data: payload });
-        });
+
+        const accessData = verify(authorization, data.dataValues.salt);
+        if (!accessData) {
+          return res.status(401).send({ message: 'please check your token.' });
         }
-      })
-      
+        const payload = {
+          user_id: accessData.user_id,
+          name: accessData.name,
+          created_at: accessData.created_at,
+        };
+        return res.status(200).send({ message: 'success!', data: payload });
+      });
+  },
+  patch: (req, res) => {
+    const { authorization } = req.headers;
+    if (!authorization) {
+      return res.status(401).send({ message: 'please check your token.' });
     }
+    account.findOne({ where: { uuid: req.params.uuid } }).then((data) => {
+      if (!data) {
+        return res.status(400).send({ message: 'please check your information.' });
+      }
+
+      const { pw_hash, name } = req.body;
+      const accessData = verify(authorization, data.dataValues.salt);
+      if (!accessData) {
+        return res.status(401).send({ message: 'please check your token.' });
+      }
+      account.update({ pw_hash, name }, { where: { uuid: req.params.uuid } })
+        .then(() => {
+          account.findOne({ where: { uuid: req.params.uuid } }).then((result) => {
+            const payload = {
+              user_id: result.dataValues.user_id,
+              name: result.dataValues.name,
+              created_at: result.dataValues.created_at,
+            };
+            return res.status(200).send({ message: 'change success!', data: payload });
+          });
+        });
+    });
   },
   delete: (req, res) => {
-    const accessData = verify(req);
-    if (accessData.confirm===false) {
-      res.status(401).send({ data: null, message: 'please check your token.' });
+    const { authorization } = req.headers;
+    if (!authorization) {
+      return res.status(401).send({ data: null, message: 'please check your token.' });
     }
-    else {
-      account.destroy({ where: { uuid: accessData.data.uuid } })
-        .then((data) => {
-          if (!data) {
-            res.status(400).send({ message: 'user does not exist.' });
-          }
-          else {
-            res.status(200).send({ message: 'success!' });
-          }
-        });
-    }
+
+    account.findOne({ where: { uuid: req.params.uuid } }).then((data) => {
+      if (!data) {
+        return res.status(400).send({ message: 'user does not exist.' });
+      }
+
+      const accessData = verify(authorization, data.dataValues.salt);
+      if (!accessData) return res.status(401).send({ message: 'please check your token.' });
+      account.destroy({ where: { uuid: req.params.uuid } }).then(() => res.status(200).send({ message: 'success!' }));
+    });
   },
 };
