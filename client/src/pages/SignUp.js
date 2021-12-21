@@ -1,15 +1,17 @@
 import axios from 'axios';
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import hashPassword from '../utils/hashPassword';
+import appConfig from '../app.config';
 
-function SignUpPage() {
+function SignUpPage({ setUserState }) {
+  const navigate = useNavigate();
   const [userInput, setuserInput] = useState({
     id: '',
     pw: '',
     name: '',
     pwCheck: '',
   });
-  const API_SERVER = '';
 
   const controlInputValue = key => (e) => {
     setuserInput({ ...userInput, [key]: e.target.value });
@@ -17,53 +19,47 @@ function SignUpPage() {
 
   const onClickSignUp = () => {
     const { id, pw, name, pwCheck } = userInput;
-    // // TODO: 해쉬작업
 
     if (!id || !pw || !name || !pwCheck) {
       console.log('모든 칸을 채워야 합니다');
       return;
     }
 
-    hashPassword(pw)
-      .then((pwHash) => {
-        hashPassword(pwCheck)
-          .then((pwCheckHash) => {
-            if (pwHash === pwCheckHash) {
-              console.log('사용가능');
-            } else {
-              console.log('비밀번호가 다릅니다');
-            }
-          });
+    if (pw !== pwCheck) { return; }
 
-        //   axios.post(API_SERVER,{
-        //   id,
-        //   pw_hash,
-        //   name
-        //   })
-        //   .then(res => {
-        //   console.log('가입성공');
-        //   })
+    hashPassword(pw)
+      .then((pw_hash) => {
+        axios.post(appConfig.API_SERVER + '/sign-up',{ id, pw_hash, name })
+        .then(res => {
+          setUserState({
+            isSignedIn: true,
+            access_token: res.data.access_token,
+            info: { id, name },
+          })
+        })
+        .then(() => { navigate('/'); })
       });
-  };
+  }
+      // TODO: exception handling
 
   return (
     <div className="SignUpContainer">
       <div className="SignUpLogo">회원가입</div>
       <div>
         <div>ID</div>
-        <input type="text" onChange={controlInputValue('id')} />
+        <input type="text" placeholder="ID" onChange={controlInputValue('id')} />
       </div>
       <div>
         <div>Username</div>
-        <input type="text" onChange={controlInputValue('name')} />
+        <input type="text" placeholder="Username" onChange={controlInputValue('name')} />
       </div>
       <div>
         <div>Password</div>
-        <input type="password" onChange={controlInputValue('pw')} />
+        <input type="password" placeholder="Password" onChange={controlInputValue('pw')} />
       </div>
       <div>
         <div>Password Check</div>
-        <input type="password" value={userInput.pwCheck} onChange={controlInputValue('pwCheck')} />
+        <input type="password" placeholder="Password check" value={userInput.pwCheck} onChange={controlInputValue('pwCheck')} />
       </div>
       <div className="SignUpBtnContainer">
         <button type="button" onClick={onClickSignUp}>SignUp</button>
