@@ -73,7 +73,7 @@ module.exports = {
       await account.destroy({ where: { user_id: accessData.id, uuid: req.params.uuid } })
         .then((data) => {
           if (!data) {
-            res.status(400).send({ message: 'user does not exist.' });
+            res.status(400).send({ message: 'user does not exist' });
           }
           else {
             res.status(200).send({ message: 'success!' });
