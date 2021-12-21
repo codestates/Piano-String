@@ -1,6 +1,8 @@
 import './App.css';
 import SignInPage from './pages/SignIn';
 import SignUpPage from './pages/SignUp';
+import TopNavigation from './components/TopNavigation';
+import Footer from './components/Footer';
 import { Routes, Route } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 
@@ -17,6 +19,7 @@ function App() {
 
   return (
     <div className="App">
+      <TopNavigation controlLogin={controlLogin} isLogin={isLogin} />
       <Routes>
         <Route path="/">
           <Route index element="Hello World" />
@@ -24,6 +27,7 @@ function App() {
           <Route path="sign-up" element={<SignUpPage {...{ setUserState }}/>} />
         </Route>
       </Routes>
+      <Footer />
     </div>
   );
 }
