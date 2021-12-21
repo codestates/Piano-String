@@ -9,6 +9,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      // account.associate(models.article, {foreignKey: 'music_uuid', sourceKey: 'uuid'});
     }
   }
   music.init({

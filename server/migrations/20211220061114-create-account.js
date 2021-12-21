@@ -8,6 +8,7 @@ module.exports = {
       },
       user_id: {
         allowNull: false,
+        unique: true,
         type: Sequelize.STRING,
       },
       pw_hash: {
@@ -25,6 +26,7 @@ module.exports = {
       access: {
         allowNull: false,
         type: Sequelize.BOOLEAN,
+        defaultValue: false,
       },
       created_at: {
         allowNull: false,
@@ -33,6 +35,7 @@ module.exports = {
       expired: {
         allowNull: false,
         type: Sequelize.BOOLEAN,
+        defaultValue: false,
       },
       expired_at: { type: Sequelize.DATE }
     });

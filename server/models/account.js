@@ -1,5 +1,6 @@
 const { Model } = require('sequelize');
 
+
 module.exports = (sequelize, DataTypes) => {
   class account extends Model {
     /**
@@ -9,6 +10,10 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      // account.associate(models.announcement, {foreignKey: 'account_uuid', sourceKey: 'uuid'});
+      // account.associate(models.music, {foreignKey: 'account_uuid', sourceKey: 'uuid'});
+      // account.associate(models.article, {foreignKey: 'account_uuid', sourceKey: 'uuid'});
+      
     }
   }
   account.init({
@@ -18,6 +23,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     user_id: {
       allowNull: false,
+      unique: true,
       type: DataTypes.STRING
     },
     pw_hash: {
