@@ -1,15 +1,14 @@
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
-import UserInfoViewer from '../components/UserInfo';
+import UserInfoViewer from '../components/UserInfoViewer';
 import ExpireModal from '../components/ExpireModal';
 import appConfig from '../app.config';
 
 function myPage({ userState }) {
-  const [updateInfo, setUpdateInfo] = useState(false);
   const [controlModal, setControlModal] = useState(false);
 
   const getUserInfo = () => {
-    axios.get(`${API_SERVER}/user/${userState.uuid}`)
+    axios.get(`${appConfig.API_SERVER}/user/${userState.uuid}`)
       .then((res) => {
         setUserInfo({
           userId: res.data.user_id,
@@ -17,10 +16,6 @@ function myPage({ userState }) {
           createdAt: res.data.createdAt,
         });
       });
-  };
-
-  const controlUpdateInfo = () => {
-    setUpdateInfo(!updateInfo);
   };
 
   const controlExpireModal = () => {
@@ -38,10 +33,8 @@ function myPage({ userState }) {
         ? (
           <div className="mypageContainer">
             <div className="infoContainer">
-              <UserInfoViewer controlUpdateInfo={controlUpdateInfo} updateInfo={updateInfo} userInfo={userInfo} />
+              <UserInfoViewer {...{userState}} />
               <button type="button">작성하기</button>
-              <button type="button" onClick={controlUpdateInfo}>수정하기</button>
-              <button type="button" onClick={controlExpireModal}>탈퇴하기</button>
             </div>
             <div className="articleListContainer">
               <div>articleListContainer</div>
