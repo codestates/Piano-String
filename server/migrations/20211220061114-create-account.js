@@ -19,10 +19,6 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING,
       },
-      salt: {
-        allowNull: false,
-        type: Sequelize.STRING,
-      },
       access: {
         allowNull: false,
         type: Sequelize.BOOLEAN,
@@ -30,14 +26,11 @@ module.exports = {
       },
       created_at: {
         allowNull: false,
-        type: Sequelize.DATE,
+        type: Sequelize.DATE(3),
       },
-      expired: {
-        allowNull: false,
-        type: Sequelize.BOOLEAN,
-        defaultValue: false,
-      },
-      expired_at: { type: Sequelize.DATE }
+      expired_at: {
+        type: Sequelize.DATE(3)
+      }
     });
   },
   down: async (queryInterface, Sequelize) => {

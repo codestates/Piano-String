@@ -34,24 +34,17 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       type: DataTypes.STRING
     },
-    salt: {
-      allowNull: false,
-      type: DataTypes.STRING
-    },
     access: {
       allowNull: false,
-      type: DataTypes.BOOLEAN
+      type: DataTypes.BOOLEAN,
+      defaultValue: false
     },
     created_at: {
       allowNull: false,
       type: DataTypes.DATE
     },
-    expired: {
-      allowNull: false,
-      type: DataTypes.BOOLEAN
-    },
     expired_at: {
-      type: DataTypes.DATE
+      type: DataTypes.DATE,
     },
   }, {
     sequelize,

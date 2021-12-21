@@ -1,56 +1,41 @@
 const jwt = require('jsonwebtoken');
-const crypto = require('crypto');
 const { v4 } = require('uuid');
 const { account } = require('../../models');
+const { generateAccessToken, hashPassword } = require('../../utils');
 
 /**
  * @path /user/sign-up
  */
 module.exports = {
-  post: (req, res) => {
-    const { user_id, pw_hash, name } = req.body;
+  post: async (req, res) => {
+    const { user_id, pw_hash: pw, name } = req.body;
 
-    let message = '';
-
-    if (user_id === undefined || pw_hash === undefined || name === undefined) {
-      message = 'please check your information.';
-      res.status(400).send({ message });
-    } else {
-      const salt = crypto.randomBytes(14).toString('base64');
-
-      account.findOrCreate({
-        where: { user_id },
-        defaults: {
-          uuid: v4(),
-          pw_hash,
-          name,
-          salt,
-          access: false,
-          expired: false,
-          created_at: new Date(),
-        },
-      }).then((result) => {
-        if (!result[1]) {
-          message = 'please check your id.';
-          res.status(401).send({ message });
-        } else {
-          const { dataValues } = result[0];
-          const tokenData = {
-            user_id: dataValues.user_id,
-            name: dataValues.name,
-            created_at: new Date(),
-          };
-          const accessToken = jwt.sign(tokenData, dataValues.salt);
-
-          message = 'sign-up success!';
-
-          res.status(201).send({
-            message,
-            accessToken,
-            uuid: dataValues.uuid,
-          });
-        }
-      });
+    if (user_id === undefined || pw === undefined || name === undefined) {
+      res.status(400).send({ message: 'please check your information.' });
     }
+    const uuid = v4();
+    const created_at = new Date();
+    const pw_hash = await hashPassword(pw);
+
+    account.findOrCreate({
+      where: { user_id },
+      defaults: {
+        uuid,
+        pw_hash,
+        name,
+        created_at,
+      },
+    }).then(([row, created]) => {
+      if (!created) {
+        return res.status(401).send({ message: 'please check your id.' });
+      }
+      const access_token = generateAccessToken(row);
+
+      res.status(201).send({
+        message: 'sign-up success!',
+        access_token,
+        uuid: row.dataValues.uuid,
+      });
+    });
   },
 };
