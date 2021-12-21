@@ -10,7 +10,8 @@ function App() {
   const [userState, setUserState] = useState({
     isSignedIn: false,
     accessToken: '',
-    info: {},
+    uuid: '',
+    info: { userId: '', name: '' },
   })
 
   const controlLogin = () => {
