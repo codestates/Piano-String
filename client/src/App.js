@@ -5,6 +5,9 @@ import TopNavigation from './components/TopNavigation';
 import Footer from './components/Footer';
 import { Routes, Route } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import appConfig from './app.config';
+import MyPage from './pages/MyPage';
 
 function App() {
   const [userState, setUserState] = useState({
@@ -14,18 +17,26 @@ function App() {
     info: { userId: '', name: '' },
   })
 
-  const controlLogin = () => {
-    setUserState(!userState.isSignedIn);
+  const handleSignIn = ({ uuid, accessToken }) => {
+    setUserState(prev => ({ ...prev, uuid, accessToken }), () => {
+      axios.get(`${appConfig.API_SERVER}/user/${uuid}`)
+        .then((res) => {
+          if (res.status === 200) {
+            setUserState(prev => ({
+              ...prev,
+              info: {
+                userId: res.data.user_id,
+                name: res.data.name,
+              },
+            }));
+          }
+        })
+    })
   }
-  const [isLogin, setIsLogin] = useState(false);
-
-  const controlLogin = () => {
-    setIsLogin(!isLogin);
-  };
 
   return (
     <div className="App">
-      <TopNavigation controlLogin={controlLogin} isLogin={isLogin} />
+      <TopNavigation {...{userState}} />
       <Routes>
         <Route path="/">
           <Route index element="Hello World" />
