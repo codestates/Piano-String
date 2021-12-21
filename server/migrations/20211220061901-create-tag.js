@@ -1,8 +1,7 @@
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('tags', {
+    await queryInterface.createTable('tag', {
       uuid: {
-        allowNull: false,
         primaryKey: true,
         type: Sequelize.UUID,
       },
@@ -13,6 +12,6 @@ module.exports = {
     });
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('tags');
+    await queryInterface.dropTable('tag');
   },
 };

@@ -12,8 +12,22 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   article_tag.init({
-    article_uuid: DataTypes.UUID,
-    tag_uuid: DataTypes.UUID,
+    article_uuid: {
+      primaryKey: true,
+      type: DataTypes.UUID,
+      references: {
+        model: 'article',
+        key: 'uuid'
+      }
+    },
+    tag_uuid: {
+      primaryKey: true,
+      type: DataTypes.UUID,
+      references: {
+        model: 'tag',
+        key: 'uuid'
+      }
+    }
   }, {
     sequelize,
     modelName: 'article_tag',

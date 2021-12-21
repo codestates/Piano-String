@@ -1,13 +1,14 @@
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('accounts', {
+    await queryInterface.createTable('account', {
       uuid: {
         allowNull: false,
         primaryKey: true,
         type: Sequelize.UUID,
       },
-      id: {
+      user_id: {
         allowNull: false,
+        unique: true,
         type: Sequelize.STRING,
       },
       pw_hash: {
@@ -25,6 +26,7 @@ module.exports = {
       access: {
         allowNull: false,
         type: Sequelize.BOOLEAN,
+        defaultValue: false,
       },
       created_at: {
         allowNull: false,
@@ -33,11 +35,12 @@ module.exports = {
       expired: {
         allowNull: false,
         type: Sequelize.BOOLEAN,
+        defaultValue: false,
       },
-      expired_at: { type: Sequelize.DATE },
+      expired_at: { type: Sequelize.DATE }
     });
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('accounts');
+    await queryInterface.dropTable('account');
   },
 };

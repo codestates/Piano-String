@@ -1,4 +1,5 @@
 const express = require('express');
+const userRouter = require('./router/user');
 
 const app = express();
 const port = 80;

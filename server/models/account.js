@@ -1,5 +1,6 @@
 const { Model } = require('sequelize');
 
+
 module.exports = (sequelize, DataTypes) => {
   class account extends Model {
     /**
@@ -9,18 +10,49 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      // account.associate(models.announcement, {foreignKey: 'account_uuid', sourceKey: 'uuid'});
+      // account.associate(models.music, {foreignKey: 'account_uuid', sourceKey: 'uuid'});
+      // account.associate(models.article, {foreignKey: 'account_uuid', sourceKey: 'uuid'});
+      
     }
   }
   account.init({
-    uuid: DataTypes.UUID,
-    id: DataTypes.STRING,
-    pw_hash: DataTypes.STRING,
-    name: DataTypes.STRING,
-    salt: DataTypes.STRING,
-    access: DataTypes.BOOLEAN,
-    created_at: DataTypes.DATE,
-    expired: DataTypes.BOOLEAN,
-    expired_at: DataTypes.DATE,
+    uuid: {
+      primaryKey: true,
+      type: DataTypes.UUID
+    },
+    user_id: {
+      allowNull: false,
+      unique: true,
+      type: DataTypes.STRING
+    },
+    pw_hash: {
+      allowNull: false,
+      type: DataTypes.STRING
+    },
+    name: {
+      allowNull: false,
+      type: DataTypes.STRING
+    },
+    salt: {
+      allowNull: false,
+      type: DataTypes.STRING
+    },
+    access: {
+      allowNull: false,
+      type: DataTypes.BOOLEAN
+    },
+    created_at: {
+      allowNull: false,
+      type: DataTypes.DATE
+    },
+    expired: {
+      allowNull: false,
+      type: DataTypes.BOOLEAN
+    },
+    expired_at: {
+      type: DataTypes.DATE
+    },
   }, {
     sequelize,
     modelName: 'account',
