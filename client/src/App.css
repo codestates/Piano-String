@@ -1,5 +1,24 @@
-.App {
+.App {  
   text-align: center;
+  min-height: 100%;
+
+}
+
+.TopNavigation {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+}
+
+.TopNavigation_manu {
+  display: flex;
+  list-style: none;
+  padding: 0;
+}
+
+.TopNavigation_manu li {
+  padding: 10px;
 }
 
 .App-logo {

@@ -1,9 +1,29 @@
 import './App.css';
+import SignInPage from './pages/SignIn';
+import SignUpPage from './pages/SignUp';
+import { Routes, Route } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
 
 function App() {
+  const [userState, setUserState] = useState({
+    isSignedIn: false,
+    accessToken: '',
+    info: {},
+  })
+
+  const controlLogin = () => {
+    setUserState(!userState.isSignedIn);
+  }
+
   return (
     <div className="App">
-      <p>Hello, world!</p>
+      <Routes>
+        <Route path="/">
+          <Route index element="Hello World" />
+          <Route path="sign-in" element={<SignInPage {...{ setUserState }}/>} />
+          <Route path="sign-up" element={<SignUpPage {...{ setUserState }}/>} />
+        </Route>
+      </Routes>
     </div>
   );
 }
