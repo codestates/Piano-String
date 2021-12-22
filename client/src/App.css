@@ -3,6 +3,16 @@
   min-height: 100%;
 }
 
+.middleWrapper {
+  display: flex;
+  justify-content: space-around;
+}
+
+.musicWrapper{
+  display: flex;
+  justify-content: space-around;
+}
+
 .TopNavigation {
   display: flex;
   justify-content: space-between;
@@ -105,3 +115,45 @@
     transform: rotate(360deg);
   }
 }
+ 
+.HashWrap{
+  margin-top: 24px;
+  font-size: 1.125rem;
+  display: flex;
+  flex-direction: column;
+  letter-spacing: -0.6px;
+  padding: 2px 2px 8px 2px;
+  width: 50%;
+}
+  .HashWrapOuter {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .HashWrapInner {
+    margin-top: 1px;
+    background: #dadada;
+    border-radius: 56px;
+    padding: 4px 8px;
+    color: #000000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    font-size: 1rem;
+    line-height: 20px;
+    margin-right: 5px;
+    cursor: pointer;
+  }
+
+  .HashInput {
+    width: auto;
+    margin: 10px;
+    display: inline-flex;
+    outline: none;
+    cursor: text;
+    line-height: 2rem;
+    margin-bottom: 0.75rem;
+    min-width: 8rem;
+    border: none;
+  }
