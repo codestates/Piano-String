@@ -9,8 +9,12 @@ import axios from 'axios';
 import appConfig from './app.config';
 import MyPage from './pages/MyPage';
 import * as mm from '@magenta/music/es6';
+import MusicPage from './pages/MusicPage';
+import Home from './pages/Home';
 
 global.mm = mm;
+global.musicVAE = new mm.MusicVAE('https://storage.googleapis.com/magentadata/js/checkpoints/music_vae/mel_4bar_small_q2');
+musicVAE.initialize();
 
 function App() {
   const [userState, setUserState] = useState({
@@ -42,10 +46,11 @@ function App() {
       <TopNavigation {...{userState}} />
       <Routes>
         <Route path="/">
-          <Route index element="Hello World" />
+          <Route index element={<Home />} />
           <Route path="sign-in" element={<SignInPage {...{ setUserState }}/>} />
           <Route path="sign-up" element={<SignUpPage {...{ setUserState }}/>} />
           <Route path="user" element={<MyPage userState={userState} />} />
+          <Route path="music/:uuid" element={<MusicPage />} />
         </Route>
       </Routes>
       <Footer />
