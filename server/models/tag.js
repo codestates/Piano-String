@@ -18,8 +18,8 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.UUID
     },
     title: {
-      allowNull: false,
-      type: DataTypes.STRING
+      allowNull: true,
+      type: DataTypes.ARRAY(DataTypes.DECIMAL)
     }
   }, {
     sequelize,
