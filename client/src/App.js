@@ -5,6 +5,7 @@ import AnnouncementList from './pages/AnnouncementPage';
 import AnnouncementView from './pages/AnnouncementView';
 import AnnouncementWrite from './pages/AnnouncementWrite';
 import ArticleWrite from './pages/ArticleWrite';
+import ArticleView from './pages/AticleView';
 import TopNavigation from './components/TopNavigation';
 import Footer from './components/Footer';
 import { Routes, Route } from 'react-router-dom';
@@ -54,6 +55,7 @@ function App() {
           <Route path="announcementWrite" element={<AnnouncementWrite announcementUUID={ announcementUUID } />} />
           <Route path="user" element={<MyPage userState={userState} />} />
           <Route path="articleWrite" element={<ArticleWrite />} />
+          <Route path="articleView" element={<ArticleView />} />
         </Route>
       </Routes>
       <Footer />
