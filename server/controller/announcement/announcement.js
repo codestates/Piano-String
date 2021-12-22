@@ -11,110 +11,78 @@ module.exports = {
      * @param { offset, limit } req.body
      */
   get: (req, res) => {
-    let { limit, offset } = req.query;
-
     let message = '';
     let data = {};
 
-    limit = limit !== undefined ? parseInt(limit) : 10;
-    offset = offset !== undefined ? parseInt(offset) : 0;
-    
+    // TODO: restrict page size?
+    let limit = parseInt(req.query.limit ?? 10);
+    let offset = parseInt(req.query.offset ?? 0);
+
     if (isNaN(offset) || isNaN(limit)) {
       message = 'please check your information.';
-      res.status(400).send({ message });
-    } else {
-      limit = limit > 0 ? limit : 10;
-      offset = offset >= 0 ? offset * limit : 0;
-
-      announcement.findAll({
-        attributes: [
-          'uuid',
-          'title',
-          'created_at',
-        ],
-        offset,
-        limit,
-        order: [
-            ['created_at', 'DESC'], 
-            ['title', 'ASC']
-        ]
-      }).then((result) => {
-        message = 'success!';
-        data = { announcement_list: result };
-        res.status(200).send({ message, data });
-      });
+      return res.status(400).send({ message });
     }
+
+    limit = Math.max(limit, 0) || 10
+    offset = Math.max(offset, 0) && limit * offset;
+
+    announcement.findAll({
+      attributes: [
+        'uuid',
+        'title',
+        'created_at',
+      ],
+      offset,
+      limit,
+      order: [
+          ['created_at', 'DESC'],
+      ]
+    }).then((result) => {
+      message = 'success!';
+      res.status(200).send({ message, data: result });
+    });
   },
   /**
      * @method POST
      * @param { authorization } req.header
      * @param { title, content } req.body
      */
-  post: (req, res) => {
-    const { authorization } = req.headers;
+  post: async (req, res) => {
+    const { verified, data: { user_id } } = verifyAccessToken(req);
+    if (!verified) { res.status(401).send({ message: 'not authorized.' }); }
+
     const { title, content } = req.body;
-
-    let message = '';
-    const data = {};
-
-    if (authorization === undefined) {
-      message = 'not authorized.';
-      res.status(401).send({ message });
-    }
     if (title === undefined || content === undefined) {
-      message = 'please check parameter.';
-      res.status(400).send({ message });
+      res.status(400).send({ message: 'please check parameter.' });
     }
 
-    try {
-      const token = verifyAccessToken(req);
-      const { verified } = token;
+    const userRow = await account.findOne({ where: { user_id } })
+    const { uuid: account_uuid } = userRow;
 
-      if (verified) {
-        const { user_id } = token.data;
-        
-        account.findOne({ where: { user_id } }).then((result) => {
-          const { uuid } = result;
-
-          if (result === null || !result.access) {
-            message = 'not authorized.';
-            res.status(401).send({ message });
-          } else {
-            const announcement_uuid = v4();
-
-            announcement.findOrCreate({
-              where: { uuid: announcement_uuid },
-              defaults: {
-                account_uuid: uuid,
-                title,
-                content,
-                created_at: new Date(),
-              },
-            }).then((result) => {
-              if (result[1]) {
-                message = 'success!';
-                data['announcement_uuid'] = announcement_uuid;
-                res.status(201).send({ message, data });
-              } else {
-                message = 'please try again.';
-                res.status(400).send({ message });
-              }
-            });
-          }
-        });
-      } else {
-        message = 'not authorized.';
-        res.status(401).send({ message });
-      }
-    } catch (err) {
-      if (err.name === 'JsonWebTokenError') {
-        message = 'not authorized.';
-        res.status(401).send({ message });
-      } else {
-        console.log(err);
-        message = 'please check parameter.';
-        res.status(400).send({ message });
-      }
+    if (userRow === null || !userRow.access) {
+      return res.status(401).send({ message: 'not authorized.' });
     }
+
+    const new_uuid = v4();
+
+    const [newRow, created]= await announcement.findOrCreate({
+      where: { uuid: new_uuid },
+      defaults: {
+        account_uuid,
+        title,
+        content,
+        created_at: new Date(),
+      },
+    })
+
+    if (!created) {
+      return res.status(400).send({ message: 'please try again.' });
+    }
+
+    message = 'success!';
+    res.status(201).send({
+      message: 'success!',
+      uuid: newRow.uuid,
+    });
   },
 };
