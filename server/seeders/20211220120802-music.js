@@ -15,7 +15,7 @@ module.exports = {
       uuid: '8fa0bbdf-6b54-43dd-8a68-9feeb064e6cc',
       account_uuid: 'cb5d9303-7680-4f64-963b-e6a3c963586e',
       title: '음악 1',
-      content: JSON.stringify({
+      content: {
         notes: [
           {pitch: 60, startTime: 0.0, endTime: 0.5},
           {pitch: 60, startTime: 0.5, endTime: 1.0},
@@ -33,13 +33,13 @@ module.exports = {
           {pitch: 60, startTime: 7.0, endTime: 8.0},  
         ],
         totalTime: 8
-      }),
+      },
       created_at: new Date('2021-12-01 01:01:01')
     }, {
       uuid: '5a0da949-8ee4-4205-a552-81d3825ae5c2',
       account_uuid: 'e520cf4b-ca0e-4af8-a790-105727623166',
       title: '음악 2',
-      content: JSON.stringify({
+      content: {
         notes: [
           { pitch: 36, quantizedStartStep: 0, quantizedEndStep: 1, isDrum: true },
           { pitch: 38, quantizedStartStep: 0, quantizedEndStep: 1, isDrum: true },
@@ -63,10 +63,10 @@ module.exports = {
         quantizationInfo: {stepsPerQuarter: 4},
         tempos: [{time: 0, qpm: 120}],
         totalQuantizedSteps: 11
-      }),
+      },
       created_at: new Date('2021-12-02 02:02:02')
     }];
-    await queryInterface.bulkInsert('music', data, {});
+    await queryInterface.bulkInsert('music', data, {}, { content: { type: new Sequelize.JSON() } });
   },
 
   down: async (queryInterface, Sequelize) => {

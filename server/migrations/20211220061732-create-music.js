@@ -4,6 +4,7 @@ module.exports = {
       uuid: {
         primaryKey: true,
         type: Sequelize.UUID,
+        defaultValue: Sequelize.UUIDV4,
       },
       account_uuid: {
         allowNull: false,
@@ -14,12 +15,11 @@ module.exports = {
         },
       },
       title: {
-        allowNull: false,
         type: Sequelize.STRING,
       },
       content: {
         allowNull: false,
-        type: Sequelize.TEXT,
+        type: Sequelize.JSON,
       },
       created_at: {
         allowNull: false,

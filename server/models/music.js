@@ -15,7 +15,8 @@ module.exports = (sequelize, DataTypes) => {
   music.init({
     uuid: {
       primaryKey: true,
-      type: DataTypes.UUID
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
     },
     account_uuid: {
       allowNull: false,
@@ -26,12 +27,11 @@ module.exports = (sequelize, DataTypes) => {
       }
     },
     title: {
-      allowNull: false,
       type: DataTypes.STRING
     },
     content: {
       allowNull: false,
-      type: DataTypes.TEXT
+      type: DataTypes.JSON
     },
     created_at: {
       allowNull: false,

@@ -4,9 +4,11 @@ module.exports = {
       uuid: {
         primaryKey: true,
         type: Sequelize.UUID,
+        defaultValue: Sequelize.UUIDV4,
       },
       title: {
         allowNull: false,
+        unique: true,
         type: Sequelize.STRING,
       },
     });
