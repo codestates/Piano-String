@@ -1,8 +1,5 @@
-const jwt = require('jsonwebtoken');
 const { account, announcement } = require('../../models');
-
-// test hash token
-const HASH_TOKEN = 'test';
+const { verifyAccessToken } = require('../../utils');
 
 /**
  * @path /announcement/:uuid
@@ -63,11 +60,12 @@ module.exports = {
     }
 
     try {
-      const auth = authorization.split(' ')[1];
-      const token = jwt.verify(auth, HASH_TOKEN);
-      const { user_id } = token;
+        const token = verifyAccessToken(req);
+        const { verified } = token;
+  
+      if (verified) {
+        const { user_id } = token.data;
 
-      if (user_id !== undefined || user_id !== null) {
         account.findOne({
           where: { user_id },
           attributes: [
@@ -141,11 +139,12 @@ module.exports = {
     }
 
     try {
-      const auth = authorization.split(' ')[1];
-      const token = jwt.verify(auth, HASH_TOKEN);
-      const { user_id } = token;
+      const token = verifyAccessToken(req);
+      const { verified } = token;
 
-      if (user_id !== undefined || user_id !== null) {
+      if (verified) {
+        const { user_id } = token.data;
+        
         account.findOne({
           where: { user_id },
           attributes: [

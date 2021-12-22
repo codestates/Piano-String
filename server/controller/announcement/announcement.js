@@ -1,9 +1,6 @@
-const jwt = require('jsonwebtoken');
 const { v4 } = require('uuid');
 const { account, announcement } = require('../../models');
-
-// test hash token
-const HASH_TOKEN = 'test';
+const { verifyAccessToken } = require('../../utils');
 
 /**
  * @path /announcement
@@ -19,15 +16,15 @@ module.exports = {
     let message = '';
     let data = {};
 
-    offset = offset !== undefined ? parseInt(offset) : 0;
     limit = limit !== undefined ? parseInt(limit) : 10;
-
+    offset = offset !== undefined ? parseInt(offset) : 0;
+    
     if (isNaN(offset) || isNaN(limit)) {
       message = 'please check your information.';
       res.status(400).send({ message });
     } else {
       limit = limit > 0 ? limit : 10;
-      offset = offset > 0 ? (offset - 1) * limit : 0;
+      offset = offset >= 0 ? offset * limit : 0;
 
       announcement.findAll({
         attributes: [
@@ -37,6 +34,10 @@ module.exports = {
         ],
         offset,
         limit,
+        order: [
+            ['created_at', 'DESC'], 
+            ['title', 'ASC']
+        ]
       }).then((result) => {
         message = 'success!';
         data = { announcement_list: result };
@@ -66,11 +67,12 @@ module.exports = {
     }
 
     try {
-      const auth = authorization.split(' ')[1];
-      const token = jwt.verify(auth, HASH_TOKEN);
-      const { user_id } = token;
+      const token = verifyAccessToken(req);
+      const { verified } = token;
 
-      if (user_id !== undefined || user_id !== null) {
+      if (verified) {
+        const { user_id } = token.data;
+        
         account.findOne({ where: { user_id } }).then((result) => {
           const { uuid } = result;
 
@@ -91,7 +93,7 @@ module.exports = {
             }).then((result) => {
               if (result[1]) {
                 message = 'success!';
-                data.announcement_uuid = announcement_uuid;
+                data['announcement_uuid'] = announcement_uuid;
                 res.status(201).send({ message, data });
               } else {
                 message = 'please try again.';
