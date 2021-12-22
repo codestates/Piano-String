@@ -12,28 +12,20 @@ module.exports = {
   get: (req, res) => {
     const { uuid } = req.params;
 
-    let message = '';
-    let data = {};
-
     announcement.findOne({
       where: { uuid },
       attributes: [
-        ['uuid', 'announcement'],
+        'uuid',
         'title',
         'content',
         'created_at',
       ],
     }).then((result) => {
       if (result === null) {
-        message = 'please check your information.';
-        res.status(400).send({ message });
-      } else {
-        const { dataValues } = result;
-
-        message = 'success!';
-        data = dataValues;
-        res.status(400).send({ message, data });
+        return res.status(400).send({ message: 'please check your information.' });
       }
+
+      return res.status(200).send({ message: 'success!', data:result.dataValues });
     });
   },
   /**
@@ -42,145 +34,56 @@ module.exports = {
      * @param { authorization } req.headers
      * @param { title, content } req.body
      */
-  patch: (req, res) => {
+  patch: async (req, res) => {
+    const { verified, data: userData } = verifyAccessToken(req);
+    if (!verified) { res.status(401).send({ message: 'not authorized.' }); }
+
     const { uuid } = req.params;
     const { authorization } = req.headers;
     const { title, content } = req.body;
 
-    let message = '';
-    let data = {};
-
-    if (authorization === undefined) {
-      message = 'not authorized.';
-      res.status(401).send({ message });
-    }
-    if (title === undefined || content === undefined) {
-      message = 'please check parameter.';
-      res.status(400).send({ message });
+    if (!title || !content) {
+      return res.status(400).send({ message: 'please check parameter.' });
     }
 
-    try {
-        const token = verifyAccessToken(req);
-        const { verified } = token;
-  
-      if (verified) {
-        const { user_id } = token.data;
+    const userRow = await account.findOne({
+      where: { uuid: userData.uuid },
+      attributes: ['access'],
+    })
 
-        account.findOne({
-          where: { user_id },
-          attributes: [
-            'access',
-          ],
-        }).then((result) => {
-          const { access } = result;
-
-          if (!access || access === undefined) {
-            message = 'not authorized.';
-            res.status(401).send({ message });
-          } else {
-            announcement.update({
-              title,
-              content,
-            }, { where: { uuid } }).then((result2) => {
-              console.log(result2);
-              if (result2[0] > 0) {
-                announcement.findOne({
-                  where: { uuid },
-                  attributes: [
-                    ['uuid', 'announcement'],
-                    'title',
-                    'content',
-                    'created_at',
-                  ],
-                }).then((result3) => {
-                  const { dataValues } = result3;
-
-                  message = 'success!';
-                  data = dataValues;
-                  res.status(400).send({ message, data });
-                });
-              } else {
-                message = 'please check parameter.';
-                res.status(400).send({ message });
-              }
-            });
-          }
-        });
-      } else {
-        message = 'not authorized.';
-        res.status(401).send({ message });
-      }
-    } catch (err) {
-      if (err.name === 'JsonWebTokenError') {
-        message = 'not authorized.';
-        res.status(401).send({ message });
-      } else {
-        console.log(err);
-        message = 'please check parameter.';
-        res.status(400).send({ message });
-      }
+    if (!userRow || !userRow.access) {
+      return res.status(401).send({ message: 'not authorized.' });
     }
+
+    await announcement.update(
+      { title, content },
+      { where: { uuid } },
+    )
+
+    return res.status(204).send();
   },
   /**
      * @path DELETE
      * @param { uuid } req.params
      * @param { authorization } req.headers
      */
-  delete: (req, res) => {
+  delete: async (req, res) => {
+    const { verified, data: userData } = verifyAccessToken(req);
+    if (!verified) { res.status(401).send({ message: 'not authorized.' }); }
+
     const { uuid } = req.params;
-    const { authorization } = req.headers;
 
-    let message = '';
-    const data = {};
+    const userRow = await account.findOne({
+      where: { uuid: userData.uuid },
+      attributes: ['access'],
+    })
 
-    if (authorization === undefined) {
-      message = 'not authorized.';
-      res.status(401).send({ message });
+    if (!userRow || !userRow.access) {
+      return res.status(401).send({ message: 'not authorized.' });
     }
 
-    try {
-      const token = verifyAccessToken(req);
-      const { verified } = token;
+    await announcement.destroy({ where: { uuid } })
 
-      if (verified) {
-        const { user_id } = token.data;
-        
-        account.findOne({
-          where: { user_id },
-          attributes: [
-            'access',
-          ],
-        }).then((result) => {
-          const { access } = result;
-
-          if (!access || access === undefined) {
-            message = 'not authorized.';
-            res.status(401).send({ message });
-          } else {
-            announcement.destroy({ where: { uuid } }).then((result) => {
-              if (result > 0) {
-                message = 'success!';
-                res.status(200).send({ message });
-              } else {
-                message = 'please check parameter.';
-                res.status(400).send({ message });
-              }
-            });
-          }
-        });
-      } else {
-        message = 'not authorized.';
-        res.status(401).send({ message });
-      }
-    } catch (err) {
-      if (err.name === 'JsonWebTokenError') {
-        message = 'not authorized.';
-        res.status(401).send({ message });
-      } else {
-        console.log(err);
-        message = 'please check parameter.';
-        res.status(400).send({ message });
-      }
-    }
+    return res.status(204).send();
   },
 };
