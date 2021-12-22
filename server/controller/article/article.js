@@ -1,4 +1,4 @@
-const { article, music, tag, article_tag } = require('../../models');
+const { article, music: musicModel, tag: tagModel, article_tag } = require('../../models');
 const { generateAccessToken, verifyAccessToken } = require('../../utils');
 const { v4 } = require('uuid');
 
@@ -11,9 +11,7 @@ module.exports = {
     if (!auth.verified) {
       return res.status(401).send({ message: 'please check your token.' });
     }
-    console.log(req.query.uuid)
-    const row = await article.findAll({ where: { account_uuid: req.query.uuid } })
-    console.log(row)
+    const row = await article.findAll({ where: { account_uuid: auth.data.uuid } })
     if (row.length===0) { return res.status(400).send({ message: `please check article's information.` }); }
     const articleList = row.map((el)=>{
       const payload = {
@@ -27,55 +25,56 @@ module.exports = {
       message: 'success!',
       data: articleList
     });
-    
+
   },
   post: async (req, res) => {
     const auth = verifyAccessToken(req);
     if (!auth.verified) {
       return res.status(401).send({ message: 'please check your token.' });
     }
-    
+
     const uuid = v4();
     const account_uuid = auth.data.uuid
     const created_at = new Date()
-    
-    const {title, content, newTag, music_uuid} = req.body
-    if(!title || !content || !music_uuid){
+
+    const { title, content, tag, music } = req.body
+    if(!title || !content || !music){
       return res.status(400).send({message:`please check article's information.`})
     }
 
-    const musicInfo = await music.findOne({where:{uuid:req.body.music_uuid}})
-    
-    
+    // const musicInfo = await music.findOne({where:{uuid:req.body.music_uuid}})
 
-    const created = await article.create({
-      uuid:uuid,
-      account_uuid:account_uuid,
-      created_at:created_at,
-      title:title,
-      content:content,
-      music_uuid:musicInfo.dataValues.uuid  
+    const musicRow = await musicModel.create({
+      uuid: v4(),
+      account_uuid,
+      created_at,
+      content: music,
     })
-    
-    if (!created) {
-      return res.status(400).send({ message: `please check article's information.` });
+
+    const articleRow = await article.create({
+      uuid,
+      account_uuid,
+      created_at,
+      title,
+      content,
+      music_uuid:musicRow.uuid
+    })
+
+    for (let tagTitle of tag) {
+      const tagRow = await tagModel.findOrCreate({
+        where: { title: tagTitle },
+        // defaults: { },
+      });
+      // article_tag.create({
+      //   article_uuid: articleRow.uuid,
+      //   tag_uuid: tagRow.uuid,
+      // });
     }
-    const tag_uuid = v4();
-    if(newTag){
-      await tag.create({uuid:tag_uuid, title:newTag}).then(data=>{
-      console.log(data)
-      })
-      await article_tag.create({article_uuid:uuid,tag_uuid:tag_uuid})
-    }
-    
-        
 
     res.status(201).send({
       message: 'success!',
-      data: {article_uuid:uuid}
+      uuid: articleRow.uuid,
     });
-    
   }
-    
 }
 

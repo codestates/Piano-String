@@ -13,7 +13,7 @@ module.exports = {
     }
     const row = await article.findOne({ where: { uuid: req.params.uuid } })
     if (!row) { return res.status(400).send({ message: `please check article's uuid.` }); }
-    
+
     const musicInfo = await music.findOne({where:{uuid:row.dataValues.music_uuid}})
     if (!musicInfo) { return res.status(400).send({ message: `please check article's uuid.` }); }
 
@@ -22,7 +22,7 @@ module.exports = {
       else {
         return tag.findOne({where:{uuid:data.dataValues.tag_uuid}})
       }
-       
+
     })
     const payload = {
         title: row.dataValues.title,
@@ -32,13 +32,13 @@ module.exports = {
         created_at: row.dataValues.created_at,
         currentTag:currentTag
     }
-        
+
     res.status(200).send({
       message:'success!',
       data:payload
     })
-    
-    
+
+
   },
   patch: async (req, res) => {
     const auth = verifyAccessToken(req);
@@ -46,39 +46,22 @@ module.exports = {
       return res.status(401).send({ message: 'please check your token.' });
     }
     const row = await article.findOne({ where: { uuid: req.params.uuid } })
-    if (!row) { return res.status(400).send({ message: `please check article's information.` }); }
-
-    const {title, content, music_uuid, newTag } = req.body
-    if(!title && !content && !music_uuid && !newTag){
-      return res.status(400).send({message: `please check article's information.`})
+    if (!row || row.account_uuid !== auth.data.uuid) {
+      return res.status(400).send({ message: `please check article's information.` });
     }
 
-    const musicInfo = await music.findOne({where:{uuid:req.body.music_uuid}})
-    if (!musicInfo) { return res.status(400).send({ message: `please check article's uuid.` }); }  
-
-
+    const { title, content } = req.body
+    if(!title || !content){
+      return res.status(400).send({message: `please check article's information.`})
+    }
 
     const updated = article.update({
       title:title,
       content:content,
-      music_uuid:music_uuid
-    }, {where:{uuid:req.params.uuid}})
-    
-    console.log(newTag)
-    const tagUpdated = await article_tag.findOne({where:{article_uuid:req.params.uuid}})
-    if(!tagUpdated){
-      const tag_uuid = v4();
-      tag.create({uuid:tag_uuid, title:newTag})
-      article_tag.create({article_uuid:req.params.uuid, tag_uuid:tag_uuid})
-    }else{
-      tag.update({title:newTag}, {where:{uuid:tagUpdated.dataValues.tag_uuid}})
-    }
-    
-    res.status(200).send({message:'success!', data:{article_uuid:req.params.uuid}})
-    
+    }, { where: { uuid: req.params.uuid } })
 
+    res.status(204).send();
 
-    
   },
   delete: async (req, res) => {
     const auth = verifyAccessToken(req);
@@ -91,8 +74,8 @@ module.exports = {
 
     await article_tag.destroy({where:{article_uuid:req.params.uuid}})
     await article.destroy({where:{uuid:req.params.uuid}})
-    
+
     return res.status(200).send({ message: 'success!' });
-  },      
+  },
 }
 

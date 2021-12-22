@@ -10,7 +10,7 @@ const _admin = {
   created_at: '2021-12-21T12:00:15.637Z',
 }
 
-const _user = {
+const _guest = {
   uuid: 'e520cf4b-ca0e-4af8-a790-105727623166',
   user_id: 'test02',
   pw_hash: 'password02',
@@ -26,18 +26,51 @@ const newUser = {
   created_at: '2021-12-21T12:00:15.637Z',
 }
 
-const server = 'http://localhost';
+const music = {
+  content: {
+    notes: [
+      { pitch: 60, startTime: 0.0, endTime: 0.5 },
+      { pitch: 60, startTime: 0.5, endTime: 1.0 },
+      { pitch: 67, startTime: 1.0, endTime: 1.5 },
+      { pitch: 67, startTime: 1.5, endTime: 2.0 },
+      { pitch: 69, startTime: 2.0, endTime: 2.5 },
+      { pitch: 69, startTime: 2.5, endTime: 3.0 },
+      { pitch: 67, startTime: 3.0, endTime: 4.0 },
+      { pitch: 65, startTime: 4.0, endTime: 4.5 },
+      { pitch: 65, startTime: 4.5, endTime: 5.0 },
+      { pitch: 64, startTime: 5.0, endTime: 5.5 },
+      { pitch: 64, startTime: 5.5, endTime: 6.0 },
+      { pitch: 62, startTime: 6.0, endTime: 6.5 },
+      { pitch: 62, startTime: 6.5, endTime: 7.0 },
+      { pitch: 60, startTime: 7.0, endTime: 8.0 },
+    ],
+    totalTime: 8,
+  },
+}
+
+const article = {
+  title: 'newTitle',
+  content: 'newContent',
+  music,
+  tag: ['new', 'article', 'music'],
+}
+
+const host = 'http://localhost';
+
+function to(path) {
+  return `${host}/${path}`;
+}
 
 function idpw(account) {
   const { user_id, pw_hash } = account;
   return { user_id, pw_hash };
 }
 
-const [admin, user] = [idpw(_admin), idpw(_user)];
+const [admin, guest] = [idpw(_admin), idpw(_guest)];
 
 function signIn({ user_id, pw_hash }) {
   // POST /user/sign-in
-  return axios.post(`${server}/user/sign-in`, { user_id, pw_hash })
+  return axios.post(`${host}/user/sign-in`, { user_id, pw_hash })
     .then((resp) => {
       console.log('    ==== POST /user/sign-in', resp.status);
       return { Authorization: 'Bearer ' + resp.data.access_token };
@@ -52,7 +85,7 @@ function testUser() {
   let account, headers, uuid;
 
   // POST /user/sign-up
-  return axios.post(`${server}/user/sign-up`, { user_id, pw_hash, name })
+  return axios.post(`${host}/user/sign-up`, { user_id, pw_hash, name })
     .then((resp) => {
       console.log('    ==== POST /user/sign-up', resp.status);
       uuid = resp.data.uuid;
@@ -64,7 +97,7 @@ function testUser() {
 
     // GET /user/:uuid
     .then(() => {
-      return axios.get(`${server}/user/${uuid}`, { headers })
+      return axios.get(`${host}/user/${uuid}`, { headers })
         .then((resp) => {
           console.log('    ==== GET /user/:uuid', resp.status);
         })
@@ -72,7 +105,7 @@ function testUser() {
 
     // PATCH /user/:uuid
     .then(() => {
-      return axios.patch(`${server}/user/${uuid}`, { name: 'changedNewName' }, { headers })
+      return axios.patch(`${host}/user/${uuid}`, { name: 'changedNewName' }, { headers })
         .then((resp) => {
           console.log('    ==== PATCH /user/:uuid', resp.status);
         })
@@ -80,7 +113,7 @@ function testUser() {
 
     // DELETE /user/:uuid
     .then(() => {
-      return axios.delete(`${server}/user/${uuid}`, { headers })
+      return axios.delete(`${host}/user/${uuid}`, { headers })
         .then((resp) => {
           console.log('    ==== DELETE /user/:uuid', resp.status);
         })
@@ -93,13 +126,14 @@ function testUser() {
 function testAnnouncement({ user_id, pw_hash }) {
 
   console.log('==== Announcement API');
-  // entrypoint
   let headers, uuid;
+
+  // POST /user/sign-in
   return signIn({ user_id, pw_hash }).then((auth) => { headers = auth })
 
     // GET /announcement
     .then(() => {
-      return axios.get(`${server}/announcement/7d7e2be6-1319-44e7-8e91-7d2474c3a71d`)
+      return axios.get(`${host}/announcement/7d7e2be6-1319-44e7-8e91-7d2474c3a71d`)
         .then((resp) => {
           console.log('    ==== GET /announcement', resp.status);
         })
@@ -108,7 +142,7 @@ function testAnnouncement({ user_id, pw_hash }) {
     // POST /announcement
     .then(() => {
       return axios.post(
-        `${server}/announcement/`,
+        `${host}/announcement/`,
         { title: 'newTitle', content: 'Lorem ipsum dolor sit amet'},
         { headers },
       ).then((resp) => {
@@ -120,7 +154,7 @@ function testAnnouncement({ user_id, pw_hash }) {
 
     // GET /announcement/:uuid
     .then(() => {
-      return axios.get(`${server}/announcement/${uuid}`)
+      return axios.get(`${host}/announcement/${uuid}`)
         .then((resp) => {
           console.log('    ==== GET /announcement/:uuid', resp.status);
         })
@@ -129,7 +163,7 @@ function testAnnouncement({ user_id, pw_hash }) {
     // PATCH /announcement/:uuid
     .then(() => {
       return axios.patch(
-        `${server}/announcement/${uuid}`,
+        `${host}/announcement/${uuid}`,
         { title: 'changedTitle', content: 'Lorem ipsum dolor sit amet'},
         { headers },
       ).then(resp => console.log('    ==== PATCH /announcement/:uuid', resp.status)); // 204
@@ -138,7 +172,7 @@ function testAnnouncement({ user_id, pw_hash }) {
     // DELETE /announcement/:uuid
     .then(() => {
       return axios.delete(
-        `${server}/announcement/${uuid}`,
+        `${host}/announcement/${uuid}`,
         { headers },
       ).then(resp => console.log('    ==== DELETE /announcement/:uuid', resp.status)); // 204
     })
@@ -147,6 +181,51 @@ function testAnnouncement({ user_id, pw_hash }) {
 
 }
 
+function testArticle() {
+  console.log('==== Article API');
+
+  let headers, uuid;
+
+  // POST /user/sign-in
+  return signIn(guest).then((auth) => { headers = auth })
+
+    // GET /article
+    .then(() => {
+      return axios.get(to('article'), { headers })
+        .then(resp => console.log('    ==== GET /article', resp.status))
+    })
+
+    // POST /article
+    .then(() => {
+      return axios.post(to('article'), article, { headers })
+        .then(resp => {
+          uuid = resp.data.uuid;
+          console.log('    ==== POST /article', resp.status);
+        })
+    })
+
+    // GET /article/:uuid
+    .then(() => {
+      return axios.get(to(`article/${uuid}`), { headers })
+        .then(resp => console.log('    ==== GET /article/:uuid', resp.status));
+    })
+
+    // PATCH /article/:uuid
+    .then(() => {
+      return axios.patch(to(`article/${uuid}`), { title: 'changedTitle', content: 'changedContent' }, { headers })
+        .then(resp => console.log('    ==== PATCH /article/:uuid', resp.status));
+    })
+
+    // DELETE /article/:uuid
+    .then(() => {
+      return axios.delete(to(`article/${uuid}`), { headers })
+        .then(resp => console.log('    ==== DELETE /article/:uuid', resp.status));
+    })
+
+    .then(() => console.log(''));
+}
+
 testUser()
   .then(() => testAnnouncement(admin))
+  .then(() => testArticle())
 ;

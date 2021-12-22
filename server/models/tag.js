@@ -15,11 +15,13 @@ module.exports = (sequelize, DataTypes) => {
   tag.init({
     uuid: {
       primaryKey: true,
-      type: DataTypes.UUID
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
     },
     title: {
-      allowNull: true,
-      type: DataTypes.ARRAY(DataTypes.DECIMAL)
+      allowNull: false,
+      unique: true,
+      type: DataTypes.TEXT,
     }
   }, {
     sequelize,
