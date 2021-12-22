@@ -8,6 +8,9 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import appConfig from './app.config';
 import MyPage from './pages/MyPage';
+import * as mm from '@magenta/music/es6';
+
+global.mm = mm;
 
 function App() {
   const [userState, setUserState] = useState({
