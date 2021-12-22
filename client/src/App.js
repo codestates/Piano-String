@@ -1,6 +1,9 @@
 import './App.css';
 import SignInPage from './pages/SignIn';
 import SignUpPage from './pages/SignUp';
+import AnnouncementList from './pages/AnnouncementPage';
+import AnnouncementView from './pages/AnnouncementView';
+import AnnouncementWrite from './pages/AnnouncementWrite';
 import TopNavigation from './components/TopNavigation';
 import Footer from './components/Footer';
 import { Routes, Route } from 'react-router-dom';
@@ -45,6 +48,9 @@ function App() {
           <Route index element="Hello World" />
           <Route path="sign-in" element={<SignInPage {...{ setUserState }}/>} />
           <Route path="sign-up" element={<SignUpPage {...{ setUserState }}/>} />
+          <Route path="announcementList" element={<AnnouncementList userState={ userState } />} />
+          <Route path="announcementView" element={<AnnouncementView userState={ userState } announcementUUID={ announcementUUID } />} />
+          <Route path="announcementWrite" element={<AnnouncementWrite announcementUUID={ announcementUUID } />} />
           <Route path="user" element={<MyPage userState={userState} />} />
         </Route>
       </Routes>
