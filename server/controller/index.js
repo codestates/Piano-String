@@ -1,4 +1,5 @@
-const user = require('./user');
+const announcement = require('./announcement');
 const article = require('./article');
+const user = require('./user');
 
-module.exports = { userController: user, articleController:article };
+module.exports = { userController: user, announcementController: announcement, articleController: article };

@@ -1,3 +1,4 @@
+// TODO: integrate into index.js
 function hashPassword(password) {
   return crypto.subtle.digest('sha-256', new TextEncoder().encode(password))
     .then((buffer) => {
