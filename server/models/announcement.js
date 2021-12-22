@@ -30,7 +30,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     content: {
       allowNull: false,
-      type: DataTypes.STRING
+      type: DataTypes.TEXT
     },
     created_at: {
       allowNull: false,
