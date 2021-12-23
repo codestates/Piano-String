@@ -58,6 +58,9 @@ module.exports = {
     const auth = verifyAccessToken(req);
 
     if (!auth.verified || auth.data.uuid !== req.params.uuid) {
+      console.log(auth.verified)
+      console.log(auth.data)
+      console.log(auth.req.params.uuid)
       return res.status(401).send({ message: 'please check your token.' });
     }
 
