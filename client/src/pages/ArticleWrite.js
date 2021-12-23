@@ -36,7 +36,7 @@ function ArticleWrite() {
         music: article.music_content,
       }
     )
-      .then((resp) => { navigate(`/article/${uuid || resp.uuid}`) })
+      .then((resp) => { navigate(`/article/${uuid || resp.data.uuid}`) })
   }
 
   const generateMusic = () => {

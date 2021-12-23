@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 const { account } = require('../../models');
-const { generateAccessToken, verifyAccessToken } = require('../../utils');
+const { generateAccessToken, hashPassword, verifyAccessToken } = require('../../utils');
 
 /**
  * @path /user/:uuid
@@ -44,7 +44,7 @@ module.exports = {
       return res.status(401).send({ message: 'please check your token.' });
     }
 
-    await account.update({ pw_hash, name }, { where: { uuid: req.params.uuid } });
+    await account.update({ pw_hash: await hashPassword(pw_hash), name }, { where: { uuid: req.params.uuid } });
     const newRow = await account.findOne({ where: { uuid: req.params.uuid } })
     const payload = {
       user_id: newRow.dataValues.user_id,
@@ -58,13 +58,16 @@ module.exports = {
     const auth = verifyAccessToken(req);
 
     if (!auth.verified || auth.data.uuid !== req.params.uuid) {
+      console.log(auth.verified)
+      console.log(auth.data)
+      console.log(auth.req.params.uuid)
       return res.status(401).send({ message: 'please check your token.' });
     }
 
     const row = await account.findOne({ where: { uuid: req.params.uuid } })
     if (!row) { return res.status(400).send({ message: 'user does not exist.' }); }
 
-    await account.destroy({ where: { uuid: req.params.uuid } });
+    await account.destroy({ where: { uuid: req.params.uuid }, cascade: true });
     return res.status(200).send({ message: 'success!' });
   },
   getPermission: async (req, res) => {
