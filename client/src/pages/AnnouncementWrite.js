@@ -40,13 +40,13 @@ function announcementWrite() {
 
   return (
     // TODO: uuid가 리스트안에 존재하면 그 데이터를 가져온다(수정하기), 없다면 새로작성
-    <div>
+    <div className="articleBody">
       <div className="articleWritetWrapper">
         <div className="inputTitle">
           <input type="text" value={writeData.title} onChange={controlInputValue('title') } />
         </div>
         <div className="inputContent">
-          <input type="text" value={writeData.content} onChange={controlInputValue('content')} />
+          <textarea type="text" value={writeData.content} onChange={controlInputValue('content')} />
         </div>
       </div>
       <div className="buttonWrapper">

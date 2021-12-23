@@ -36,7 +36,7 @@ function announcementList({ userState }) {
         ) : null }
       <div className="articleListWrapper">
         { listData.length === 0
-          ? <div>아직 작성된 글이 없습니다.</div>
+          ? <div className="textContainer">아직 작성된 글이 없습니다.</div>
           : <ArticleListWrapper base="announcement" listData={listData} />
         }
       </div>
