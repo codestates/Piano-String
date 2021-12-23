@@ -1,10 +1,11 @@
 import axios from 'axios';
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import hashPassword from '../utils/hashPassword';
 import appConfig from '../app.config';
 
 function UserInfoViewer({ setIsModalVisible, uuid, userInfo }) {
-  console.log('====InfoViewer====\n', userInfo);
+  const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
 
   const [userInput, setUserInput] = useState({
@@ -31,10 +32,14 @@ function UserInfoViewer({ setIsModalVisible, uuid, userInfo }) {
       .then((pw_hash) => {
         axios.patch(`${appConfig.API_SERVER}/user/${uuid}`, { pw_hash })
           .then((res) => {
-            console.log('정보 변경 성공');
           });
         // TODO: exception handling
-      });
+      })
+        .then(() => {
+          setUserInput(prev => ({name: '', pw: '', pwCheck: ''}));
+          setIsEditing(prev => false);
+          navigate('/user');
+        })
   };
 
   return (
