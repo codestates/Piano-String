@@ -24,7 +24,7 @@ module.exports = {
       content: '테스트를 위해 입력된 데이터 중 2번째입니다. (It\'s second data.)',
       created_at: new Date('2021-12-11 12:03:37')
     }, {
-      uuid: '7d7e2be6-1319-44e7-8e91-7d2474c3a71d',
+      uuid: '0eab5166-fe28-4d62-8c27-b8ab01b9c9f5',
       account_uuid: 'e520cf4b-ca0e-4af8-a790-105727623166',
       title: 'test title***03***',
       content: '考试题目03 (시험제목03)',

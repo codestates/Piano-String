@@ -1,9 +1,11 @@
-function articleListItem({ articleItemData }) {
+import { Link } from 'react-router-dom';
+
+function articleListItem({ base, uuid, title, created_at }) {
   return (
     <div>
-      <span>{articleItemData.uuid}</span>
-      <span>{articleItemData.title}</span>
-      <span>{articleItemData.createAt}</span>
+      <span>{uuid}</span>
+      <Link to={`/${base}/${uuid}`}>{ title }</Link>
+      <span>{created_at}</span>
     </div>
   );
 }

@@ -3,8 +3,8 @@ import React, { useState } from 'react';
 import hashPassword from '../utils/hashPassword';
 import appConfig from '../app.config';
 
-function UserInfoViewer({ setIsModalVisible, userState }) {
-
+function UserInfoViewer({ setIsModalVisible, uuid, userInfo }) {
+  console.log('====InfoViewer====\n', userInfo);
   const [isEditing, setIsEditing] = useState(false);
 
   const [userInput, setUserInput] = useState({
@@ -29,7 +29,7 @@ function UserInfoViewer({ setIsModalVisible, userState }) {
 
     hashPassword(pw)
       .then((pw_hash) => {
-        axios.patch(`${appConfig.API_SERVER}/user/${userState.uuid}`, { pw_hash })
+        axios.patch(`${appConfig.API_SERVER}/user/${uuid}`, { pw_hash })
           .then((res) => {
             console.log('정보 변경 성공');
           });
@@ -43,9 +43,9 @@ function UserInfoViewer({ setIsModalVisible, userState }) {
         ? (
           <div className="userInfoWrap">
             <div>유저 아이디</div>
-            <div>{userState.info.user_id}</div>
+            <div>{userInfo.user_id}</div>
             <div>유저 이름</div>
-            <div>{userState.info.name}</div>
+            <div>{userInfo.name}</div>
             <div>변경할 비밀번호</div>
             <input type="password" onChange={controlInputValue('pw')} />
             <div>변결할 비밀번호 확인</div>
@@ -59,9 +59,9 @@ function UserInfoViewer({ setIsModalVisible, userState }) {
         : (
           <div className="userInfoWrap">
             <div>유저 아이디</div>
-            <div>{userState.info.userId}</div>
+            <div>{userInfo.userId}</div>
             <div>유저 이름</div>
-            <div>{userState.info.name}</div>
+            <div>{userInfo.name}</div>
             <button type="button" onClick={() => setIsEditing(true)}>수정하기</button>
             <button type="button" onClick={() => setIsModalVisible(true)}>탈퇴하기</button>
           </div>

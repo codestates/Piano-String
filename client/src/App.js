@@ -5,29 +5,58 @@ import AnnouncementList from './pages/AnnouncementPage';
 import AnnouncementView from './pages/AnnouncementView';
 import AnnouncementWrite from './pages/AnnouncementWrite';
 import ArticleWrite from './pages/ArticleWrite';
-import ArticleView from './pages/AticleView';
+import ArticleView from './pages/ArticleView';
 import TopNavigation from './components/TopNavigation';
 import Footer from './components/Footer';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useNavigate } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import appConfig from './app.config';
 import MyPage from './pages/MyPage';
-import * as mm from '@magenta/music/es6';
 import MusicPage from './pages/MusicPage';
 import Home from './pages/Home';
 
-global.mm = mm;
-global.musicVAE = new mm.MusicVAE('https://storage.googleapis.com/magentadata/js/checkpoints/music_vae/mel_4bar_small_q2');
-musicVAE.initialize();
+const initialUserState = {
+  isSignedIn: false,
+  accessToken: '',
+  uuid: '',
+}
+
+axios.defaults.withCredentials = true;
+axios.defaults.baseURL = appConfig.API_SERVER;
 
 function App() {
-  const [userState, setUserState] = useState({
-    isSignedIn: true,
-    accessToken: '',
-    uuid: '',
-    info: { userId: '', name: '' },
-  })
+  const navigate = useNavigate();
+  const [userState, setUserState] = useState({...initialUserState})
+  const [refreshFailed, setRefreshFailed] = useState(false);
+
+  const silentRefresh = () => {
+     axios.get('/auth')
+       .then(resp => {
+         if (resp.status === 400) {
+           console.log('400!!!!!');
+           return;
+         }
+         axios.defaults.headers.common['Authorization'] = `Bearer ${resp.data.access_token}`;
+         console.log('default headers set');
+         setUserState(prev => ({
+           isSignedIn: true,
+           accessToken: resp.data.access_token,
+           uuid: resp.data.uuid,
+         }));
+       }).catch(e => { console.log(e) });
+  }
+
+  const onClickSignOut = () => {
+    axios.post(`/user/sign-out`, {})
+      .then(resp => {
+        delete axios.defaults.headers.common['Authorization'];
+        setUserState({...initialUserState});
+      })
+      .then(() => {
+        navigate('/');
+      })
+  }
 
   const handleSignIn = ({ uuid, accessToken }) => {
     setUserState(prev => ({ ...prev, uuid, accessToken }), () => {
@@ -46,20 +75,28 @@ function App() {
     })
   }
 
+  useEffect(() => {
+    if (!userState.isSignedIn && !refreshFailed) {
+      silentRefresh();
+    }
+  }, []);
+
   return (
     <div className="App">
-      <TopNavigation {...{userState}} />
+      <TopNavigation {...{ userState, onClickSignOut }} />
       <Routes>
         <Route path="/">
           <Route index element={<Home />} />
           <Route path="sign-in" element={<SignInPage {...{ setUserState }}/>} />
           <Route path="sign-up" element={<SignUpPage {...{ setUserState }}/>} />
-          <Route path="announcementList" element={<AnnouncementList userState={ userState } />} />
-          <Route path="announcementView" element={<AnnouncementView userState={ userState } announcementUUID={ announcementUUID } />} />
-          <Route path="announcementWrite" element={<AnnouncementWrite announcementUUID={ announcementUUID } />} />
-          <Route path="user" element={<MyPage userState={userState} />} />
-          <Route path="articleWrite" element={<ArticleWrite />} />
-          <Route path="articleView" element={<ArticleView />} />
+          <Route path="announcement" element={<AnnouncementList userState={ userState } />} />
+          <Route path="announcement/:uuid" element={<AnnouncementView userState={ userState } />} />
+          <Route path="announcement/write" element={<AnnouncementWrite />} />
+          <Route path="announcement/edit/:uuid" element={<AnnouncementWrite />} />
+          <Route path="user" element={<MyPage {...{userState, setUserState}} />} />
+          <Route path="article/write" element={<ArticleWrite />} />
+          <Route path="article/edit/:uuid" element={<ArticleWrite />} />
+          <Route path="article/:uuid" element={<ArticleView />} />
           <Route path="music/:uuid" element={<MusicPage />} />
         </Route>
       </Routes>

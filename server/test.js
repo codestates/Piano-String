@@ -1,9 +1,13 @@
 const axios = require('axios');
 
+const https = require('https');
+const fs = require('fs');
+https.globalAgent.options.ca = fs.readFileSync('./fullchain')
+
 const _admin = {
   uuid: 'cb5d9303-7680-4f64-963b-e6a3c963586e',
   user_id: 'test01',
-  pw_hash: 'password01',
+  pw_hash: '4b8f353889d9a05d17946e26d014efe99407cba8bd9d0102d4aab10ce6229043',
   name: '이름1',
   salt: 'salt1',
   access: true,
@@ -13,7 +17,7 @@ const _admin = {
 const _guest = {
   uuid: 'e520cf4b-ca0e-4af8-a790-105727623166',
   user_id: 'test02',
-  pw_hash: 'password02',
+  pw_hash: '08f0d4cb02352f2f7fd251fbbe1c9aa5fd176bb0c7f1bd35e4f71a8dcb820852',
   name: 'name2',
   access: false,
   created_at: new Date(),
@@ -55,7 +59,7 @@ const article = {
   tag: ['new', 'article', 'music'],
 }
 
-const host = 'http://localhost';
+const host = 'https://localhost';
 
 function to(path) {
   return `${host}/${path}`;
