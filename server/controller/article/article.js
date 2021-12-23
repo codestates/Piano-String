@@ -34,7 +34,7 @@ module.exports = {
     const account_uuid = auth.data.uuid
     const created_at = new Date()
 
-    const { title, content, tag=[], music } = req.body
+    const { title, content, tag, music } = req.body
     // console.log(title, content, music);
     if(!title || !content || !music){
       return res.status(400).send({message:`please check article's information.`})
@@ -49,7 +49,7 @@ module.exports = {
       content: music,
     })
 
-    const articleRow = await article.create({
+    const { uuid: article_uuid } = await article.create({
       uuid,
       account_uuid,
       created_at,
@@ -58,20 +58,21 @@ module.exports = {
       music_uuid:musicRow.uuid
     })
 
+    const tagRowList = [];
     for (let tagTitle of tag) {
-      const tagRow = await tagModel.findOrCreate({
+      const [tagRow, created] = await tagModel.findOrCreate({
         where: { title: tagTitle },
-        // defaults: { },
       });
-      // article_tag.create({
-      //   article_uuid: articleRow.uuid,
-      //   tag_uuid: tagRow.uuid,
-      // });
+      tagRowList.push(tagRow.uuid);
     }
+    await article_tag.bulkCreate(
+      tagRowList.map(tag_uuid => ({ tag_uuid, article_uuid })),
+      { ignoreDuplicates: true }
+    )
 
     res.status(201).send({
       message: 'success!',
-      uuid: articleRow.uuid,
+      uuid: article_uuid,
     });
   }
 }
