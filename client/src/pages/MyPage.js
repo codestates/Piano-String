@@ -6,7 +6,7 @@ import appConfig from '../app.config';
 import { useNavigate } from 'react-router-dom';
 import ArticleListWrapper from '../components/ArticleListWrapper';
 
-function myPage({ userState }) {
+function myPage({ userState, onClickSignOut }) {
   const navigate = useNavigate();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [userInfo, setUserInfo] = useState({ userId: '', name: '' })
@@ -17,9 +17,9 @@ function myPage({ userState }) {
       .then((resp) => {
         // console.log(resp.data.data);
         setUserInfo({
-            userId: resp.data.data.user_id,
-            name: resp.data.data.name,
-          });
+          userId: resp.data.data.user_id,
+          name: resp.data.data.name,
+        });
       });
   };
 
@@ -34,9 +34,8 @@ function myPage({ userState }) {
   const handleResign = () => {
     axios.delete(
       `${appConfig.API_SERVER}/user/${userState.uuid}`,
-      // { headers: { Authorization: `Bearer ${userState.accessToken}` } }
     ).then((resp) => {
-      useNavigate()('/');
+      onClickSignOut();
     })
     // TODO: exception handling
   }

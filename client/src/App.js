@@ -97,7 +97,7 @@ function App() {
           <Route path="announcement/:uuid" element={<AnnouncementView userState={ userState } />} />
           <Route path="announcement/write" element={<AnnouncementWrite />} />
           <Route path="announcement/edit/:uuid" element={<AnnouncementWrite />} />
-          <Route path="user" element={<MyPage {...{userState, setUserState}} />} />
+          <Route path="user" element={<MyPage {...{userState, onClickSignOut}} />} />
           <Route path="article/write" element={<ArticleWrite />} />
           <Route path="article/edit/:uuid" element={<ArticleWrite />} />
           <Route path="article/:uuid" element={<ArticleView />} />

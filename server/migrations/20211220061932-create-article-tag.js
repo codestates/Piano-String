@@ -4,6 +4,7 @@ module.exports = {
       article_uuid: {
         primaryKey: true,
         type: Sequelize.UUID,
+        onDelete: 'cascade',
         references: {
           model: 'article',
           key: 'uuid',
@@ -12,6 +13,7 @@ module.exports = {
       tag_uuid: {
         primaryKey: true,
         type: Sequelize.UUID,
+        onDelete: 'cascade',
         references: {
           model: 'tag',
           key: 'uuid',
