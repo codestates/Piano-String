@@ -7,13 +7,12 @@ function articleListWrapper({ base, listData }) {
   return (
     <div className="articleListWrapper">
       <div className="articleList">
-        <span>글 번호</span>
         <span>글 제목</span>
         <span>작성일</span>
       </div>
-        <ul className="articleList">
+        <ul className="articleListUl">
           {listData.map(article => (
-            <li key={article.uuid}>
+            <li className="articleTitle" key={article.uuid}>
               <ArticleListItem {...{ base, ...article }} />
             </li>
           ))}

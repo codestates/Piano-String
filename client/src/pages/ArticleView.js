@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import MusicPlayer from '../components/MusicPlayer';
 import appConfig from '../app.config';
 
 function ArticleView() {
@@ -40,18 +41,18 @@ function ArticleView() {
 
   // console.log(article);
   return (
-    <div>
+    <div className="articleWrapper">
       <div className="titleWrapper">
         <div className="articleTitle">{article.title}</div>
         <div className="articleCreateAt">{article.createdAt}</div>
       </div>
       <div className="middleWrapper">
         <div className="musicWrapper">
-          <div>{/* MusicPlayer */}</div>
+          <MusicPlayer music={article.musicContent} />
         </div>
         <div>Hashtag</div>
       </div>
-      <div className="contentWrapper">
+      <div className="articleContent">
         <div>{article.content}</div>
       </div>
       <div className="buttomWrapper">
