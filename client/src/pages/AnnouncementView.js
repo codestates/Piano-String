@@ -43,7 +43,7 @@ function announcementView({ userState }) {
   };
 
   return (
-    <div>
+    <div className="articleWrapper">
       <div className="articleViewWrapper">
         <div className="articleTitleWraper">
           <span className="articleTitle">{announcement.title}</span>
