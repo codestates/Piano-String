@@ -46,6 +46,10 @@ a {
 textarea{
   height: 100%;
   width: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  font-size: 15px;
+  color: white;
+  font-family: 'Gugi', cursive;
 }
 
 .contentWrapper {
@@ -65,6 +69,7 @@ textarea{
   display: flex;
   color: rgb(255, 255, 255);
   background-color: rgba(0, 0, 0, 0.4);
+  padding: 10px 0px;
   justify-content: space-around
 }
 
@@ -128,6 +133,11 @@ button {
   font-family: 'Gugi', cursive;
 }
 
+button:hover {
+  /* border: rgb(255, 0, 0); */
+  background-color: cornflowerblue;
+}
+
 
 .infoContainer {
   width: 20%;
@@ -139,7 +149,7 @@ button {
 .articleListContainer {
   width: 70%;
   height: 90%;
-  background-color: rgba(255, 255, 255, 0.459);
+  background-color: rgba(0, 0, 0, 0.459);
 }
 
 .middleWrapper {
@@ -182,6 +192,7 @@ body {
 .TopNavigation_logo {
   font-size: 25px;
   padding-left: 25px;
+  cursor:pointer;
 }
 
 .modalBackround {
@@ -291,10 +302,10 @@ body {
 
   .HashWrapInner {
     margin-top: 1px;
-    background:rgba(0, 0, 0, 0.4);
+    background: rgba(100, 148, 237, 0.7);
     border-radius: 56px;
     padding: 4px 8px;
-    color: #000000;
+    color: rgb(255, 255, 255);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -320,6 +331,7 @@ body {
   .itemWrapper{
     display: flex;
     justify-content: space-around;
+    padding: 2px 0px;
   }
 
   ul {
@@ -332,6 +344,11 @@ body {
     background-color: rgba(0, 0, 0, 0.4);
     justify-content: space-around;
     flex-direction: column;
+    align-items: center;
+  }
+
+  .itemWrapper:hover {
+    background-color: cornflowerblue;
   }
 
   .articleWrapper {
@@ -351,8 +368,22 @@ body {
   }
 
   .articleContent {
-    background-color: rgba(5, 5, 5, 0.6);
+    background-color: rgba(0, 0, 0, 0.5);
     height: 40vh;
     padding: 20px 0px;
     margin: 20px;
   }
+<<<<<<< HEAD
+  
+.userInfo{
+  font-size: 15px;
+  color: rgb(187, 187, 187);
+  padding: 10px;
+  margin: 5px;
+}
+
+.buttonWrap{
+  margin: 20px 0px;
+}
+=======
+>>>>>>> 9829abdb8e6ab30e7812a3e979a7d4a808760f2b
