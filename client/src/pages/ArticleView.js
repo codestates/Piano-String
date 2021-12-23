@@ -15,7 +15,8 @@ function ArticleView() {
     content: '',
     musicTitle: '',
     musicContent: {},
-    createdAt: ''
+    createdAt: '',
+    tag: [],
   })
 
 
@@ -23,8 +24,16 @@ function ArticleView() {
     // console.log('!!!');
     axios.get(`/article/${uuid}`)
       .then((res) => {
-        // console.log(res.data);
-        setArticle(res.data.data)
+        const {
+          title,
+          content,
+          music_title: musicTitle,
+          music_content: musicContent,
+          created_at: createdAt,
+          tag,
+        } = res.data.data;
+        console.log(title, content, musicTitle, createdAt, tag);
+        setArticle(prev => ({ title, content, musicTitle, musicContent, createdAt, tag }));
       })
   }
 
@@ -39,7 +48,6 @@ function ArticleView() {
     fetchArticle();
   }, []);
 
-  // console.log(article);
   return (
     <div className="articleWrapper">
       <div className="titleWrapper">
@@ -50,7 +58,11 @@ function ArticleView() {
         <div className="musicWrapper">
           <MusicPlayer music={article.musicContent} />
         </div>
-        <div>Hashtag</div>
+        <div className="HashWrap">
+          <div className="HashWrapOuter">
+            { article.tag.map(tag => (<div className="HashWrapInner">#{tag}</div>)) }
+          </div>
+        </div>
       </div>
       <div className="articleContent">
         <div>{article.content}</div>

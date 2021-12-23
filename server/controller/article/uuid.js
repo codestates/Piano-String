@@ -17,20 +17,21 @@ module.exports = {
     const musicInfo = await music.findOne({where:{uuid:row.dataValues.music_uuid}})
     if (!musicInfo) { return res.status(400).send({ message: `please check article's uuid.` }); }
 
-    // const currentTag = await article_tag.findOne({where:{article_uuid:req.params.uuid}}).then((data)=>{
-    //   if(!data) return
-    //   else {
-    //     return tag.findOne({where:{uuid:data.dataValues.tag_uuid}})
-    //   }
-    // })
+    const tagList = (await tag.sequelize.query(
+      `select title from tag join article_tag on tag.uuid = tag_uuid` +
+      ` where article_uuid = '${req.params.uuid}'`
+    ))[0].map(obj => obj.title);
 
     const data = {
-        title: row.dataValues.title,
-        content: row.dataValues.content,
-        music_title: musicInfo.dataValues.title,
-        music_content: musicInfo.dataValues.content,
-        created_at: row.dataValues.created_at,
-    }
+      title: row.dataValues.title,
+      content: row.dataValues.content,
+      music_title: musicInfo.dataValues.title,
+      music_content: musicInfo.dataValues.content,
+      created_at: row.dataValues.created_at,
+      tag: tagList,
+    };
+
+    console.log(data);
 
     res.status(200).send({ message:'success!', data })
   },

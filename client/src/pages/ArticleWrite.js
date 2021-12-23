@@ -11,8 +11,9 @@ function ArticleWrite() {
     title: '',
     content: '',
     music_content: null,
-    tag: ['tag1', 'tag2'],
+    tag: [],
   })
+  const [tagList, setTagList] = useState([]);
 
   const navigate = useNavigate();
 
@@ -28,14 +29,17 @@ function ArticleWrite() {
   }
 
   const onClickWrite = () => {
-    (uuid ? axios.patch : axios.post)(
-      `/article/${uuid || ''}`,
-      {
-        title: article.title,
-        content: article.content,
-        music: article.music_content,
-      }
-    )
+
+    const data = {
+      title: article.title,
+      content: article.content,
+      music: article.music_content,
+      tag: tagList,
+    }
+
+    console.log(data);
+
+    (uuid ? axios.patch : axios.post)(`/article/${uuid || ''}`, data)
       .then((resp) => { navigate(`/article/${uuid || resp.data.uuid}`) })
   }
 
@@ -71,7 +75,7 @@ function ArticleWrite() {
                     { article.tag.map(tag => (<div className="HashWrapInner">#{tag}</div>))}
                   </div>
                 </div>
-              : <HashTag {...{ article, setArticle }} />
+              : <HashTag {...{ article, setArticle, tagList, setTagList }} />
             }
         </div>
         <div className="contentWrapper">
