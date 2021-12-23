@@ -1,5 +1,5 @@
 const { account } = require('../../models');
-const { checkPassword, generateAccessToken } = require('../../utils');
+const { checkPassword, generateAccessToken, generateRefreshToken } = require('../../utils');
 
 const respMsg = {
   fail: 'please check your information.',
@@ -34,6 +34,15 @@ module.exports = {
     }
 
 
+    res.cookie(
+      'refreshToken',
+      generateRefreshToken(row),
+      {
+        httpOnly: true,
+        secure: true,
+        sameSite: 'none',
+      }
+    );
     return res.status(200).send({
       message: respMsg.success,
       access_token: generateAccessToken(row),

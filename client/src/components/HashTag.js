@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useCallback } from 'react';
 
-function hashTag({ writePost, setWritePost }) {
+function hashTag({ article, setArticle }) {
   const [hashtag, setHashtag] = useState('')
   const [hashArr, setHashArr] = useState([])
 
@@ -26,13 +26,13 @@ function hashTag({ writePost, setWritePost }) {
           $HashWrapOuter?.appendChild($HashWrapInner)
           setHashArr((hashArr) => [...hashArr, hashtag])
           setHashtag('')
-          setWritePost({ ...writePost, tag: hashArr})
+          setArtice({ ...article, tag: hashArr})
         }
       }
     },
     [hashtag, hashArr],
   )
-  
+
   return (
     <div className="HashWrap">
       <div className="HashWrapOuter"></div>

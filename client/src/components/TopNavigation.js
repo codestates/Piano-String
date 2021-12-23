@@ -1,6 +1,16 @@
-import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 
-const TopNavigation = ({ userState }) => (
+function MenuItem({ to, text }) {
+  return (
+    <li>
+      <Link {...{ to }}>{text}</Link>
+    </li>
+  );
+}
+
+const TopNavigation = ({ userState, onClickSignOut }) => {
+
+  return (
   <nav className="TopNavigation">
     <div className="TopNavigation_logo">
       piano String
@@ -9,18 +19,21 @@ const TopNavigation = ({ userState }) => (
     { userState.isSignedIn
       ? (
         <ul className="TopNavigation_manu">
-          <li>Announcement</li>
-          <li>Post</li>
-          <li>MyPage</li>
-          <li>Logout</li>
+          <MenuItem to="/announcement" text="Announcement" />
+          <MenuItem to="/article/write" text="Post" />
+          <MenuItem to="/user" text="MyPage" />
+          <li>
+            <button type="button" onClick={onClickSignOut}>Sign out</button>
+          </li>
         </ul>
       )
       : (
         <ul className="TopNavigation_manu">
-          <li>Login</li>
+          <MenuItem to="/sign-in" text="Sign in" />
         </ul>
       )}
   </nav>
-);
+  )
+};
 
 export default TopNavigation;

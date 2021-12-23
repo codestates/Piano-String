@@ -7,7 +7,7 @@ import appConfig from '../app.config';
 function SignInPage({ setUserState }) {
   const navigate = useNavigate();
   const [userInput, setUserInput] = useState({
-    id: '',
+    user_id: '',
     pw: '',
   });
 
@@ -16,19 +16,24 @@ function SignInPage({ setUserState }) {
   };
 
   const onClickSignIn = () => {
-    const { id, pw } = userInput;
+    const { user_id, pw } = userInput;
     hashPassword(pw)
       .then((pwHash) => {
-        axios.post(appConfig.API_SERVER + '/user/sign-in', {
-          id,
-          pw_hash: pwHash,
-        })
-        .then((res) => {
+        axios.post(
+          '/user/sign-in',
+          {
+            user_id,
+            pw_hash: pwHash,
+          },
+          { headers: { "Content-Type": "application/json" } }
+        )
+        .then(({ data: { uuid, access_token: accessToken } }) => {
           setUserState({
             isSignedIn: true,
-            accessToken: res.data.access_token,
-            uuid: res.data.uuid,
+            accessToken,
+            uuid,
           })
+          axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`
         })
         .then(() => {
           navigate('/');
