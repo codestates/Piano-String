@@ -17,28 +17,22 @@ module.exports = {
     const musicInfo = await music.findOne({where:{uuid:row.dataValues.music_uuid}})
     if (!musicInfo) { return res.status(400).send({ message: `please check article's uuid.` }); }
 
-    const currentTag = await article_tag.findOne({where:{article_uuid:req.params.uuid}}).then((data)=>{
-      if(!data) return
-      else {
-        return tag.findOne({where:{uuid:data.dataValues.tag_uuid}})
-      }
+    // const currentTag = await article_tag.findOne({where:{article_uuid:req.params.uuid}}).then((data)=>{
+    //   if(!data) return
+    //   else {
+    //     return tag.findOne({where:{uuid:data.dataValues.tag_uuid}})
+    //   }
+    // })
 
-    })
-    const payload = {
+    const data = {
         title: row.dataValues.title,
         content: row.dataValues.content,
         music_title: musicInfo.dataValues.title,
-        music_centent: musicInfo.dataValues.content,
+        music_content: musicInfo.dataValues.content,
         created_at: row.dataValues.created_at,
-        currentTag:currentTag
     }
 
-    res.status(200).send({
-      message:'success!',
-      data:payload
-    })
-
-
+    res.status(200).send({ message:'success!', data })
   },
   patch: async (req, res) => {
     const auth = verifyAccessToken(req);

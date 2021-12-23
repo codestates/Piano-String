@@ -14,14 +14,11 @@ module.exports = {
     const row = await article.findAll({ where: { account_uuid: auth.data.uuid } })
     if (row.length===0) { return res.status(400).send({ message: `please check article's information.` }); }
     const articleList = row.map((el)=>{
-      const payload = {
-        article_uuid : el.dataValues.uuid,
-        title : el.dataValues.title,
-        created_at : el.dataValues.created_at
-      }
-      return payload
+      const { uuid, title, created_at } = el.dataValues
+      return { uuid, title, created_at }
     })
-    res.status(200).send({
+    // console.log('returning');
+    return res.status(200).send({
       message: 'success!',
       data: articleList
     });
@@ -37,7 +34,8 @@ module.exports = {
     const account_uuid = auth.data.uuid
     const created_at = new Date()
 
-    const { title, content, tag, music } = req.body
+    const { title, content, tag=[], music } = req.body
+    // console.log(title, content, music);
     if(!title || !content || !music){
       return res.status(400).send({message:`please check article's information.`})
     }
