@@ -63,8 +63,13 @@ textarea{
 
 .articleList {
   display: flex;
-  color: rgb(0, 0, 0);
+  color: rgb(255, 255, 255);
+  background-color: rgba(0, 0, 0, 0.4);
   justify-content: space-around
+}
+
+.articleTitle {
+  width: 100%;
 }
 
 .bodyWrapper{
@@ -133,6 +138,7 @@ button {
 
 .articleListContainer {
   width: 70%;
+  height: 90%;
   background-color: rgba(255, 255, 255, 0.459);
 }
 
@@ -310,7 +316,43 @@ body {
     min-width: 8rem;
     border: none;
   }
-/* 
-.topbuttom {
-  background-color: #00000000;
-} */
+
+  .itemWrapper{
+    display: flex;
+    justify-content: space-around;
+  }
+
+  ul {
+    list-style: none;
+  }
+
+  .articleListUl{
+    display: flex;
+    color: rgb(255, 255, 255);
+    background-color: rgba(0, 0, 0, 0.4);
+    justify-content: space-around;
+    flex-direction: column;
+  }
+
+  .articleWrapper {
+    height: 70vh;
+    background-color: rgba(0, 0, 0, 0.4);
+    color: white;
+    padding-top: 10px;
+  }
+
+  .articleTitle {
+    padding: 0px 10px;
+  }
+
+  .articleTitleWraper {
+    display: flex;
+    align-items: center;
+  }
+
+  .articleContent {
+    background-color: rgba(5, 5, 5, 0.6);
+    height: 40vh;
+    padding: 20px 0px;
+    margin: 20px;
+  }

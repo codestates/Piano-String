@@ -67,7 +67,7 @@ module.exports = {
     const row = await account.findOne({ where: { uuid: req.params.uuid } })
     if (!row) { return res.status(400).send({ message: 'user does not exist.' }); }
 
-    await account.destroy({ where: { uuid: req.params.uuid } });
+    await account.destroy({ where: { uuid: req.params.uuid }, cascade: true });
     return res.status(200).send({ message: 'success!' });
   },
   getPermission: async (req, res) => {
