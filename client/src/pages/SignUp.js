@@ -44,7 +44,7 @@ function SignUpPage({ setUserState }) {
 
   return (
     <div className="SignUpContainer">
-      <div className="SignUpLogo">회원가입</div>
+      <div className="SignUpLogo">Join</div>
       <div>
         <div>ID</div>
         <input type="text" placeholder="ID" onChange={controlInputValue('id')} />

@@ -40,13 +40,13 @@ function SignInPage({ setUserState }) {
 
   return (
     <div className="SignInContainer">
-      <div className="SignInLogo">로그인</div>
+      <div className="SignInLogo">Login</div>
       <div>
-        <label htmlFor="input_signin_id">ID</label>
+        <div htmlFor="input_signin_id">ID</div>
         <input type="text" id="input_signin_id" onChange={controlInput('id')} />
       </div>
       <div>
-        <label htmlFor="input_signin_password">Password</label>
+        <div htmlFor="input_signin_password">Password</div>
         <input type="password" id="input_signin_password" onChange={controlInput('pw')} />
       </div>
       <div className="SignInBtnContainer">

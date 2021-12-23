@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 const TopNavigation = ({ userState }) => (
   <nav className="TopNavigation">
     <div className="TopNavigation_logo">
-      음악 일기
+      piano String
     </div>
 
     { userState.isSignedIn
