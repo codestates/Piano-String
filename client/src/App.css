@@ -11,9 +11,66 @@
   background-size : cover;
 }
 
-.bodyWrapper{
-  height: 76vh;
+a {
+  color: white;
+  text-decoration: none;
 }
+
+.articleWriteWrap {
+  display: flex;
+  height: 73vh;
+  width: 85%;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.articleWritetWrapper {
+  display: flex;
+  width: 85%;
+  flex-direction: column;
+}
+
+.inputContent {
+  margin: 20px 0px;
+  height: 40vh;
+}
+
+.articleBody {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 70vh;
+}
+
+textarea{
+  height: 100%;
+  width: 100%;
+}
+
+.contentWrapper {
+  height: 45%;
+}
+
+.textContainer{
+  display: flex;
+  height: 73vh;
+  flex-direction: column;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.3);
+  color: white;
+}
+
+.articleList {
+  display: flex;
+  color: rgb(0, 0, 0);
+  justify-content: space-around
+}
+
+.bodyWrapper{
+  height: 70vh;
+}
+
 
 .contentText {
   height: 50vh;
@@ -66,6 +123,7 @@ button {
   font-family: 'Gugi', cursive;
 }
 
+
 .infoContainer {
   width: 20%;
   height: 50;
@@ -75,7 +133,7 @@ button {
 
 .articleListContainer {
   width: 70%;
-  background-color: rgba(255, 255, 255, 0.226);
+  background-color: rgba(255, 255, 255, 0.459);
 }
 
 .middleWrapper {
@@ -96,6 +154,7 @@ body {
   /* background-color: rgba(255, 255, 255, 0.151); */
   width: 25%;
   margin-top: 25vh;
+  margin-left: 50px;
   color: white;
 }
 
@@ -251,3 +310,7 @@ body {
     min-width: 8rem;
     border: none;
   }
+/* 
+.topbuttom {
+  background-color: #00000000;
+} */

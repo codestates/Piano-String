@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 function MenuItem({ to, text }) {
   return (
@@ -9,11 +10,12 @@ function MenuItem({ to, text }) {
 }
 
 const TopNavigation = ({ userState, onClickSignOut }) => {
+  const navigate = useNavigate();
 
   return (
   <nav className="TopNavigation">
     <div className="TopNavigation_logo">
-      piano String
+      Piano String
     </div>
 
     { userState.isSignedIn
@@ -22,14 +24,12 @@ const TopNavigation = ({ userState, onClickSignOut }) => {
           <MenuItem to="/announcement" text="Announcement" />
           <MenuItem to="/article/write" text="Post" />
           <MenuItem to="/user" text="MyPage" />
-          <li>
-            <button type="button" onClick={onClickSignOut}>Sign out</button>
-          </li>
+          <button className="topbuttom" type="button" onClick={onClickSignOut}>Sign out</button>
         </ul>
       )
       : (
         <ul className="TopNavigation_manu">
-          <MenuItem to="/sign-in" text="Sign in" />
+          <button type="button" onClick={()=>navigate('/sign-in')}>Sign in</button>
         </ul>
       )}
   </nav>

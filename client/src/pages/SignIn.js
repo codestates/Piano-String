@@ -56,7 +56,7 @@ function SignInPage({ setUserState }) {
       </div>
       <div className="SignInBtnContainer">
         <button type="button" onClick={onClickSignIn}>SignIn</button>
-        <button type="button">SignUp</button>
+        <button type="button" onClick={() => navigate('/sign-up')}>SignUp</button>
       </div>
     </div>
   );

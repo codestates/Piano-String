@@ -51,34 +51,36 @@ function ArticleWrite() {
   }, [])
 
   return (
-    <div>
-      <div className="titleWrapper">
-        <input type="text" value={article.title} onChange={controlInputValue('title')} />
-      </div>
-      <div className="middleWrapper">
-        <div className="musicWrapper">
-          <button onClick={generateMusic}>Generate music</button>
-          { article.music_content
-            ? <MusicPlayer music={article.music_content}/>
-            : null
-          }
+    <div className="articleBody">
+      <div className="articleWriteWrap">
+        <div className="titleWrapper">
+          <input type="text" value={article.title} onChange={controlInputValue('title')} />
         </div>
-          { uuid
-            ?
-              <div className="HashWrap">
-                <div className="HashWrapOuter">
-                  { article.tag.map(tag => (<div className="HashWrapInner">#{tag}</div>))}
+        <div className="middleWrapper">
+          <div className="musicWrapper">
+            <button onClick={generateMusic}>Generate music</button>
+            { article.music_content
+              ? <MusicPlayer music={article.music_content}/>
+              : null
+            }
+          </div>
+            { uuid
+              ?
+                <div className="HashWrap">
+                  <div className="HashWrapOuter">
+                    { article.tag.map(tag => (<div className="HashWrapInner">#{tag}</div>))}
+                  </div>
                 </div>
-              </div>
-            : <HashTag {...{ article, setArticle }} />
-          }
-      </div>
-      <div className="contentWrapper">
-        <input type="text" value={article.content} onChange={controlInputValue('content')} />
-      </div>
-      <div className="buttomWrapper">
-        <button onClick={onClickWrite}>작성하기</button>
-        <button onClick={() => navigate("/user")}>취소하기</button>
+              : <HashTag {...{ article, setArticle }} />
+            }
+        </div>
+        <div className="contentWrapper">
+          <textarea type="text" value={article.content} onChange={controlInputValue('content')} />
+        </div>
+        <div className="buttomWrapper">
+          <button onClick={onClickWrite}>작성하기</button>
+          <button onClick={() => navigate("/user")}>취소하기</button>
+        </div>
       </div>
     </div>
   )

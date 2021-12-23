@@ -68,14 +68,14 @@ function myPage({ userState }) {
           ? <div className="mypageContainer">
               <div className="infoContainer">
                 <UserInfoViewer {...{setIsModalVisible, uuid: userState.uuid, userInfo}} />
-                <button type="button">작성하기</button>
+                {/* <button type="button">작성하기</button> */}
               </div>
               <div className="articleListContainer">
                 <ArticleListWrapper base='article' listData={articleList} />
               </div>
               <ExpireModal {...{handleResign, isModalVisible, setIsModalVisible}} />
             </div>
-          : <div>로그인이 필요합니다.</div>
+          : <div className="textContainer">로그인이 필요합니다.</div>
       }
     </div>
   );

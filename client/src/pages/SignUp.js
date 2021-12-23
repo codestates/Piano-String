@@ -7,7 +7,7 @@ import appConfig from '../app.config';
 function SignUpPage({ setUserState }) {
   const navigate = useNavigate();
   const [userInput, setuserInput] = useState({
-    id: '',
+    user_id: '',
     pw: '',
     name: '',
     pwCheck: '',
@@ -18,9 +18,9 @@ function SignUpPage({ setUserState }) {
   };
 
   const onClickSignUp = () => {
-    const { id, pw, name, pwCheck } = userInput;
+    const { user_id, pw, name, pwCheck } = userInput;
 
-    if (!id || !pw || !name || !pwCheck) {
+    if (!user_id || !pw || !name || !pwCheck) {
       console.log('모든 칸을 채워야 합니다');
       return;
     }
@@ -29,7 +29,7 @@ function SignUpPage({ setUserState }) {
 
     hashPassword(pw)
       .then((pw_hash) => {
-        axios.post(appConfig.API_SERVER + '/user/sign-up',{ id, pw_hash, name })
+        axios.post(appConfig.API_SERVER + '/user/sign-up',{ user_id, pw_hash, name })
         .then(res => {
           setUserState({
             isSignedIn: true,
@@ -47,15 +47,15 @@ function SignUpPage({ setUserState }) {
       <div className="SignUpLogo">Join</div>
       <div>
         <div>ID</div>
-        <input type="text" placeholder="ID" onChange={controlInputValue('id')} />
+        <input type="text" placeholder="ID" value={userInput.user_id} onChange={controlInputValue('user_id')} />
       </div>
       <div>
         <div>Username</div>
-        <input type="text" placeholder="Username" onChange={controlInputValue('name')} />
+        <input type="text" placeholder="Username" value={userInput.name} onChange={controlInputValue('name')} />
       </div>
       <div>
         <div>Password</div>
-        <input type="password" placeholder="Password" onChange={controlInputValue('pw')} />
+        <input type="password" placeholder="Password" value={userInput.pw} onChange={controlInputValue('pw')} />
       </div>
       <div>
         <div>Password Check</div>
