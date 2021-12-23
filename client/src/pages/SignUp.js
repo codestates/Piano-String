@@ -33,9 +33,10 @@ function SignUpPage({ setUserState }) {
         .then(res => {
           setUserState({
             isSignedIn: true,
-            access_token: res.data.access_token,
+            accessToken: res.data.access_token,
             uuid: res.data.uuid,
           })
+          axios.defaults.headers.common['Authorization'] = `Bearer ${res.data.access_token}`
         })
         .then(() => { navigate('/'); })
       });

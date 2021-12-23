@@ -19,6 +19,7 @@ module.exports = (sequelize, DataTypes) => {
     account_uuid: {
       allowNull: false,
       type: DataTypes.UUID,
+      onDelete: 'cascade',
       references: {
         model: 'account',
         key: 'uuid'

@@ -7,6 +7,7 @@ module.exports = {
       account_uuid: {
         allowNull: false,
         type: Sequelize.UUID,
+        onDelete: 'cascade',
         references: {
           model: 'account',
           key: 'uuid',

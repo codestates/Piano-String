@@ -20,6 +20,7 @@ module.exports = (sequelize, DataTypes) => {
     account_uuid: {
       allowNull: false,
       type: DataTypes.UUID,
+      onDelete: 'cascade',
       references: {
         model: 'account',
         key: 'uuid'
@@ -28,6 +29,7 @@ module.exports = (sequelize, DataTypes) => {
     music_uuid: {
       allowNull: false,
       type: DataTypes.UUID,
+      onDelete: 'cascade',
       references: {
         model: 'music',
         key: 'uuid'

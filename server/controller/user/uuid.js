@@ -58,13 +58,16 @@ module.exports = {
     const auth = verifyAccessToken(req);
 
     if (!auth.verified || auth.data.uuid !== req.params.uuid) {
+      console.log(auth.verified)
+      console.log(auth.data)
+      console.log(auth.req.params.uuid)
       return res.status(401).send({ message: 'please check your token.' });
     }
 
     const row = await account.findOne({ where: { uuid: req.params.uuid } })
     if (!row) { return res.status(400).send({ message: 'user does not exist.' }); }
 
-    await account.destroy({ where: { uuid: req.params.uuid }, cascade: true });
+    await account.destroy({ where: { uuid: req.params.uuid } });
     return res.status(200).send({ message: 'success!' });
   },
   getPermission: async (req, res) => {
