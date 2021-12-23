@@ -7,7 +7,7 @@ export function Home() {
   const [homeData, setHomeData] = useState({ isNew: false, music: {} });
 
   return (
-    <div>
+    <div className ="mainMusic">
       <h1>Piano string</h1>
       <p>Generate random music from text</p>
       {

@@ -1,6 +1,81 @@
 .App {  
+  display: flex;
+  flex-direction: column;
   text-align: center;
-  min-height: 100%;
+  height: 100vh;
+  padding: 0;
+  justify-content: space-between;
+  background-color: #f0e7e4;
+  background-image: url(./img/backgroundImg.jpg);
+  background-repeat : no-repeat;
+  background-size : cover;
+}
+
+.bodyWrapper{
+  height: 76vh;
+}
+
+.contentText {
+  height: 50vh;
+  width: 100vh;
+}
+
+.SignUpContainer {
+  display: flex;
+  height: 76vh;
+  width: 30%;
+  color:white;
+  justify-content: center;
+  flex-direction: column;
+  margin-left: 20px;
+}
+
+.SignInContainer{
+  display: flex;
+  height: 76vh;
+  width: 30%;
+  color:white;
+  justify-content: center;
+  flex-direction: column;
+  margin-left: 20px;
+}
+
+.SignUpLogo {
+  padding-bottom: 20px;
+  font-size: 24px;
+}
+
+.SignInLogo {
+  padding-bottom: 20px;
+  font-size: 24px;
+}
+
+.mypageContainer {
+  height: 76vh;
+  display: flex;
+  justify-content: center;
+}
+
+button {
+  border: 0px;
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 5px;
+  color: rgb(255, 255, 255);
+  padding: 8px 16px;
+  margin: 5px;
+  font-family: 'Gugi', cursive;
+}
+
+.infoContainer {
+  width: 20%;
+  height: 50;
+  color: white;
+  /* background-color: rgba(255, 255, 255, 0.226); */
+}
+
+.articleListContainer {
+  width: 70%;
+  background-color: rgba(255, 255, 255, 0.226);
 }
 
 .middleWrapper {
@@ -13,11 +88,35 @@
   justify-content: space-around;
 }
 
+body {
+  font-family: 'Gugi', cursive;
+}
+
+.mainMusic {
+  /* background-color: rgba(255, 255, 255, 0.151); */
+  width: 25%;
+  margin-top: 25vh;
+  color: white;
+}
+
 .TopNavigation {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 8px 12px;
+  background: #000000a4;
+  color: rgb(255, 255, 255);
+}
+
+.footerBar {
+  background: #00000098;
+  color: rgb(255, 255, 255);
+  padding-bottom: 20px ;
+}
+
+.TopNavigation_logo {
+  font-size: 25px;
+  padding-left: 25px;
 }
 
 .modalBackround {
@@ -57,11 +156,6 @@
 
 .modalInputWrap {
   height: 100px;
-}
-
-.mypageContainer {
-  display: flex;
-  justify-content: space-around;
 }
 
 .infoContainer {
@@ -132,7 +226,7 @@
 
   .HashWrapInner {
     margin-top: 1px;
-    background: #dadada;
+    background:rgba(0, 0, 0, 0.4);
     border-radius: 56px;
     padding: 4px 8px;
     color: #000000;

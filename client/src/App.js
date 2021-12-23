@@ -83,7 +83,11 @@ function App() {
 
   return (
     <div className="App">
+      <link rel="preconnect" href="https://fonts.googleapis.com" />
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+      <link href="https://fonts.googleapis.com/css2?family=Gugi&display=swap" rel="stylesheet"></link>
       <TopNavigation {...{ userState, onClickSignOut }} />
+      <div className="bodyWrapper">
       <Routes>
         <Route path="/">
           <Route index element={<Home />} />
@@ -100,6 +104,7 @@ function App() {
           <Route path="music/:uuid" element={<MusicPage />} />
         </Route>
       </Routes>
+      </div>
       <Footer />
     </div>
   );

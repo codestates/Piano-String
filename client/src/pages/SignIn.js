@@ -45,14 +45,14 @@ function SignInPage({ setUserState }) {
 
   return (
     <div className="SignInContainer">
-      <div className="SignInLogo">로그인</div>
+      <div className="SignInLogo">Login</div>
       <div>
-        <label htmlFor="input_signin_id">ID</label>
-        <input type="text" id="input_signin_id" value={userInput.user_id} onChange={controlInput('user_id')} />
+        <div htmlFor="input_signin_id">ID</div>
+        <input type="text" id="input_signin_id" onChange={controlInput('id')} />
       </div>
       <div>
-        <label htmlFor="input_signin_password">Password</label>
-        <input type="password" id="input_signin_password" value={userInput.pw} onChange={controlInput('pw')} />
+        <div htmlFor="input_signin_password">Password</div>
+        <input type="password" id="input_signin_password" onChange={controlInput('pw')} />
       </div>
       <div className="SignInBtnContainer">
         <button type="button" onClick={onClickSignIn}>SignIn</button>

@@ -13,7 +13,7 @@ const TopNavigation = ({ userState, onClickSignOut }) => {
   return (
   <nav className="TopNavigation">
     <div className="TopNavigation_logo">
-      <Link to="/">음악 일기</Link>
+      piano String
     </div>
 
     { userState.isSignedIn
