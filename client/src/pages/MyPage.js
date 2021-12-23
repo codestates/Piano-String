@@ -33,7 +33,7 @@ function myPage({ userState }) {
 
   const handleResign = () => {
     axios.delete(
-      `${appConfig.SERVER_API}/user/${userState.uuid}`,
+      `${appConfig.API_SERVER}/user/${userState.uuid}`,
       // { headers: { Authorization: `Bearer ${userState.accessToken}` } }
     ).then((resp) => {
       useNavigate()('/');

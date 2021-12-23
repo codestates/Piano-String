@@ -48,11 +48,11 @@ function SignInPage({ setUserState }) {
       <div className="SignInLogo">Login</div>
       <div>
         <div htmlFor="input_signin_id">ID</div>
-        <input type="text" id="input_signin_id" onChange={controlInput('id')} />
+        <input type="text" id="input_signin_id" value={userInput.user_id} onChange={controlInput('user_id')} />
       </div>
       <div>
         <div htmlFor="input_signin_password">Password</div>
-        <input type="password" id="input_signin_password" onChange={controlInput('pw')} />
+        <input type="password" id="input_signin_password" value={userInput.pw} onChange={controlInput('pw')} />
       </div>
       <div className="SignInBtnContainer">
         <button type="button" onClick={onClickSignIn}>SignIn</button>
