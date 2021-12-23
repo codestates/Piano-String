@@ -14,7 +14,7 @@ const TopNavigation = ({ userState, onClickSignOut }) => {
 
   return (
   <nav className="TopNavigation">
-    <div className="TopNavigation_logo">
+    <div className="TopNavigation_logo" onClick={() => navigate('/')}>
       Piano String
     </div>
 
