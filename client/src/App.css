@@ -159,7 +159,8 @@ button:hover {
 
 .musicWrapper{
   display: flex;
-  justify-content: space-around;
+  flex-direction: row;
+  align-items: center;
 }
 
 body {
@@ -373,7 +374,6 @@ body {
     padding: 20px 0px;
     margin: 20px;
   }
-<<<<<<< HEAD
   
 .userInfo{
   font-size: 15px;
@@ -385,5 +385,3 @@ body {
 .buttonWrap{
   margin: 20px 0px;
 }
-=======
->>>>>>> 9829abdb8e6ab30e7812a3e979a7d4a808760f2b
